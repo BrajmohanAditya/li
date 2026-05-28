@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
+  loginApi,
   registerApi,
 
 } from "../api/user.api";
