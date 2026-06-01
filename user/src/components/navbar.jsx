@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, Menu } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { userLogoutHook, GetUserHook } from "../hooks/user.hook";
 
-const Navbar = () => {
+const Navbar = ({ toggleSidebar }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
@@ -32,7 +32,17 @@ const Navbar = () => {
   }, []);
 
   return (
-    <div className="w-full h-[72px] bg-white flex items-center justify-end px-8 border-b border-gray-100">
+    <div className="w-full h-[72px] bg-white flex items-center justify-between px-4 md:px-8 border-b border-gray-100 shrink-0">
+      <div className="flex items-center">
+        <button 
+          onClick={toggleSidebar}
+          className="p-2 -ml-2 mr-2 text-gray-500 hover:bg-gray-100 rounded-lg md:hidden"
+        >
+          <Menu className="w-6 h-6" />
+        </button>
+      </div>
+
+      <div className="flex items-center justify-end">
       {user ? (
         <div className="relative" ref={dropdownRef}>
           {/* Profile Button */}
@@ -113,6 +123,7 @@ const Navbar = () => {
           </Link>
         </div>
       )}
+      </div>
     </div>
   );
 };

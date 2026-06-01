@@ -15,7 +15,7 @@ export class Booking {
   @Column()
   userId!: string;
 
-  @Column()
+  @Column({nullable: true})
   libraryId!: string;
 
   @ManyToOne(() => Library, (library) => library.bookings)

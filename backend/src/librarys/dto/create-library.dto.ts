@@ -8,6 +8,7 @@ import {
   Length,
   Min,
   Max,
+  IsOptional,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -45,9 +46,9 @@ export class CreateLibraryDto {
   @IsUrl()
   website!: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsUrl()
-  image!: string;
+  image?: string;
 
   @IsNotEmpty()
   @IsString()

@@ -4,6 +4,7 @@ import Home from "../pages/user/home";
 import Register from "../pages/auth/Register";
 import Login from "../pages/auth/login";
 import ProtectedRoute from "./protected.route.jsx";
+import ManageLibrary from "../pages/user/manage.library.jsx";
 
 const MainRoutes = () => {
   return (
@@ -12,6 +13,7 @@ const MainRoutes = () => {
       <Route element={<ProtectedRoute />}>
         <Route element={<UserLayout />}>
           <Route path="/" element={<Home />} />
+          <Route path="/libraries" element={<ManageLibrary />} />
         </Route>
       </Route>
 
