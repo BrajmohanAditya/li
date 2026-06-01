@@ -25,13 +25,47 @@ export const createLibraryApi = async (payload) => {
     const res = await axios.post(`${baseUrl}/librarys`, formData,
         {
             headers: {
-                // Do NOT set Content-Type manually for FormData!
-                // Axios auto-sets it with the correct multipart boundary.
                 "Authorization": `Bearer ${token}`
             },
             withCredentials: true,
         }
     );
 
+    return res.data;
+};
+
+export const getAllLibrariesApi = async () => {
+    const token = localStorage.getItem("token");
+    const res = await axios.get(`${baseUrl}/librarys`, {
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        withCredentials: true,
+    });
+    return res.data;
+};
+
+export const updateLibraryApi = async ({ id, data }) => {
+    const token = localStorage.getItem("token");
+    const res = await axios.patch(`${baseUrl}/librarys/${id}`, data, {
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        withCredentials: true,
+    });
+    return res.data;
+};
+
+export const deleteLibraryApi = async (id) => {
+    const token = localStorage.getItem("token");
+    const res = await axios.delete(`${baseUrl}/librarys/${id}`, {
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        withCredentials: true,
+    });
     return res.data;
 };

@@ -1,5 +1,5 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createLibraryApi } from "../api/library.api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { createLibraryApi, getAllLibrariesApi, updateLibraryApi, deleteLibraryApi } from "../api/library.api";
 import { toast } from "sonner";
 
 export const createLibraryHook = () => {
@@ -9,19 +9,64 @@ export const createLibraryHook = () => {
     mutationFn: createLibraryApi,
     onSuccess: (data) => {
       toast.success(data?.message || "Library created successfully!");
-      // Tells React Query to refetch the libraries list so the new library shows up immediately (when we implement the list)
       queryClient.invalidateQueries({ queryKey: ["get-libraries"] }); 
     },
     onError: (error) => {
       let message =
         error.response?.data?.message ||
         "Failed to create library. Please check your connection.";
-      
-      // NestJS ValidationPipe often returns an array of messages
       if (Array.isArray(message)) {
         message = message[0];
       }
-      
+      toast.error(message);
+    },
+  });
+};
+
+export const getAllLibrariesHook = () => {
+  const token = localStorage.getItem("token");
+
+  return useQuery({
+    queryKey: ["get-libraries"],
+    queryFn: getAllLibrariesApi,
+    enabled: !!token,
+  });
+};
+
+export const updateLibraryHook = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: updateLibraryApi,
+    onSuccess: (data) => {
+      toast.success(data?.message || "Library updated successfully!");
+      queryClient.invalidateQueries({ queryKey: ["get-libraries"] });
+    },
+    onError: (error) => {
+      let message =
+        error.response?.data?.message ||
+        "Failed to update library.";
+      if (Array.isArray(message)) {
+        message = message[0];
+      }
+      toast.error(message);
+    },
+  });
+};
+
+export const deleteLibraryHook = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteLibraryApi,
+    onSuccess: (data) => {
+      toast.success(data?.message || "Library deleted successfully!");
+      queryClient.invalidateQueries({ queryKey: ["get-libraries"] });
+    },
+    onError: (error) => {
+      const message =
+        error.response?.data?.message ||
+        "Failed to delete library.";
       toast.error(message);
     },
   });
