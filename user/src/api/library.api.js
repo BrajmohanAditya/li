@@ -10,15 +10,11 @@ export const createLibraryApi = async (payload) => {
     
     Object.keys(payload).forEach(key => {
         if (key === 'image') {
-            // Append all selected images (FileList object)
+            // Append all selected images (Array of File objects)
             if (payload.image && payload.image.length > 0) {
-                console.log(`✅ Appending ${payload.image.length} image(s) to FormData...`);
                 for (let i = 0; i < payload.image.length; i++) {
-                    console.log(`- Image ${i + 1}:`, payload.image[i].name);
                     formData.append("image", payload.image[i]);
                 }
-            } else {
-                console.log("❌ No images found in payload.image");
             }
         } else {
             // Append other text fields
@@ -26,17 +22,11 @@ export const createLibraryApi = async (payload) => {
         }
     });
 
-    // To verify formData contents in the browser console
-    for (let [key, value] of formData.entries()) {
-        if (key === 'image') {
-            console.log(`📦 FormData contains image:`, value.name);
-        }
-    }
-
     const res = await axios.post(`${baseUrl}/librarys`, formData,
         {
             headers: {
-                "Content-Type": "multipart/form-data",
+                // Do NOT set Content-Type manually for FormData!
+                // Axios auto-sets it with the correct multipart boundary.
                 "Authorization": `Bearer ${token}`
             },
             withCredentials: true,

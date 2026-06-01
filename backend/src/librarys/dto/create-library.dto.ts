@@ -8,7 +8,6 @@ import {
   Length,
   Min,
   Max,
-  IsOptional,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -46,9 +45,8 @@ export class CreateLibraryDto {
   @IsUrl()
   website!: string;
 
-  @IsOptional()
-  @IsUrl()
-  image?: string;
+  // NOTE: 'image' is NOT here because file uploads are handled
+  // by Multer via @UploadedFiles() in the controller, not through the body.
 
   @IsNotEmpty()
   @IsString()

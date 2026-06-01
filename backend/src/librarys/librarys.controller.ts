@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UploadedFile, UseInterceptors, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UploadedFiles, UseInterceptors, Req } from '@nestjs/common';
 import { LibrarysService } from './librarys.service';
 import { CreateLibraryDto } from './dto/create-library.dto';
 import { UpdateLibraryDto } from './dto/update-library.dto';
@@ -14,7 +14,7 @@ export class LibrarysController {
   create(
     @Req() req: any,
     @Body() createLibraryDto: CreateLibraryDto,
-    @UploadedFile() files: Express.Multer.File[]
+    @UploadedFiles() files: Express.Multer.File[]
   ) {
     const adminId = req.admins.id;
     return this.librarysService.create(createLibraryDto, files, adminId);
