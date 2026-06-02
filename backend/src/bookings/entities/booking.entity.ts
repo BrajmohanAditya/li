@@ -1,9 +1,6 @@
-import { Library } from 'src/librarys/entities/library.entity';
 import {
   Column,
-  CreateDateColumn,
   Entity,
-  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -12,22 +9,18 @@ export class Booking {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column()
+  @Column({type: 'uuid'})
   userId!: string;
 
-  @Column({nullable : true})
+  @Column({type: 'uuid', nullable: true})
   libraryId!: string;
 
-  @ManyToOne(() => Library, (library) => library.bookings)
-  
-  library!: Library;
-
-  @Column()
+  @Column({type: 'uuid'})
   sheetId!: string;
 
-  @Column()
+  @Column({type: 'uuid'})
   planId!: string;
-  @Column()
+  @Column({type: 'uuid'})
   featureId!: string;
 
   @Column({ type: 'timestamp' })
@@ -46,6 +39,7 @@ export class Booking {
 
   @Column({
     nullable: true,
+    
   })
   paymentId!: string;
 
@@ -54,8 +48,7 @@ export class Booking {
   })
   bookingType!: string;
 
-  @CreateDateColumn()
-createdAt!: Date;
+  
 
 
 

@@ -1,42 +1,40 @@
 import {
-  IsNotEmpty,
   IsString,
+  IsNotEmpty,
   IsEmail,
-  Matches,
+  MinLength,
 } from 'class-validator';
 
 export class CreateUserDto {
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
   name!: string;
 
-  @IsNotEmpty()
   @IsEmail()
+  @IsNotEmpty()
   email!: string;
 
-  @IsNotEmpty()
   @IsString()
+  @MinLength(6)
   password!: string;
 
+  @IsString()
   @IsNotEmpty()
-  @Matches(/^[0-9]{10}$/, {
-    message: 'Number must be a valid 10-digit phone number',
-  })
   number!: string;
 
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
   state!: string;
 
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
   city!: string;
 
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
   address!: string;
 
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
   gender!: string;
 }

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 
 import { Admin } from 'src/admins/entities/admin.entity';
 import { User } from 'src/users/entities/user.entity';
@@ -13,28 +13,25 @@ import { LibraryPrice } from 'src/library_price/entities/library_price.entity';
 export class DashboardService {
   constructor(
     @InjectRepository(Admin)
-    private adminRepo: Repository<Admin>,
+    private readonly adminRepo: Repository<Admin>,
 
     @InjectRepository(User)
-    private userRepo: Repository<User>,
+    private readonly userRepo: Repository<User>,
 
     @InjectRepository(Booking)
-    private bookingRepo: Repository<Booking>,
+    private readonly bookingRepo: Repository<Booking>,
 
     @InjectRepository(Feedback)
-    private feedbackRepo: Repository<Feedback>,
+    private readonly feedbackRepo: Repository<Feedback>,
 
     @InjectRepository(Library)
-    private libraryRepo: Repository<Library>,
+    private readonly libraryRepo: Repository<Library>,
 
     @InjectRepository(LibraryPrice)
-    private priceRepo: Repository<LibraryPrice>,
+    private readonly priceRepo: Repository<LibraryPrice>,
   ) {}
 
   async getDashboardData(adminId: string) {
-    // ======================
-    // CHECK ADMIN
-    // ======================
     const admin = await this.adminRepo.findOne({
       where: { id: adminId },
     });
@@ -43,75 +40,83 @@ export class DashboardService {
       throw new NotFoundException('Admin not found');
     }
 
-    // ======================
-    // OVERVIEW STATS
-    // ======================
-
-    const totalUsers = await this.userRepo
-      .createQueryBuilder('user')
-      .innerJoin('user.library', 'library')
-      .where('library.adminId = :adminId', { adminId })
-      .getCount();
-
-    const totalLibraries = await this.libraryRepo.count({
-      where: { admin: { id: adminId } },
+    const libraries = await this.libraryRepo.find({
+      where: { adminId },
+      
     });
 
-    const totalBookings = await this.bookingRepo
-      .createQueryBuilder('booking')
-      .innerJoin('booking.library', 'library')
-      .where('library.adminId = :adminId', { adminId })
-      .getCount();
+    const libraryIds = libraries.map((library) => library.id);
 
-    const activeBookings = await this.bookingRepo
-      .createQueryBuilder('booking')
-      .innerJoin('booking.library', 'library')
-      .where('library.adminId = :adminId', { adminId })
-      .andWhere('booking.status = :status', { status: 'ACTIVE' })
-      .getCount();
+    const totalLibraries = libraryIds.length;
 
-    // ======================
-    // REVENUE
-    // ======================
+    if (libraryIds.length === 0) {
+      return {
+        overview: {
+          totalUsers: 0,
+          totalLibraries: 0,
+          totalBookings: 0,
+          activeBookings: 0,
+          totalRevenue: 0,
+        },
+        recentBookings: [],
+        recentFeedbacks: [],
+      };
+    }
 
-    const revenueResult = await this.bookingRepo
-      .createQueryBuilder('booking')
-      .innerJoin('booking.library', 'library')
-      .innerJoin(LibraryPrice, 'plan', 'plan.id::text = booking.planId')
-      .where('library.adminId = :adminId', { adminId })
-      .select('SUM(plan.price)', 'totalRevenue')
-      .getRawOne();
+    const totalUsers = await this.userRepo.count();
 
-    const totalRevenue = Number(revenueResult?.totalRevenue) || 0;
+    const totalBookings = await this.bookingRepo.count({
+      where: {
+        libraryId: In(libraryIds),
+      },
+    });
 
-    // ======================
-    // RECENT BOOKINGS
-    // ======================
+    const activeBookings = await this.bookingRepo.count({
+      where: {
+        libraryId: In(libraryIds),
+        status: 'ACTIVE',
+      },
+    });
 
-    const recentBookings = await this.bookingRepo
-      .createQueryBuilder('booking')
-      .innerJoin('booking.library', 'library')
-      .where('library.adminId = :adminId', { adminId })
-      .orderBy('booking.createdAt', 'DESC')
-      .take(5)
-      .getMany();
+    const bookings = await this.bookingRepo.find({
+      where: {
+        libraryId: In(libraryIds),
+      },
+    });
 
-    // ======================
-    // RECENT FEEDBACKS
-    // ======================
+    let totalRevenue = 0;
 
-    const recentFeedbacks = await this.feedbackRepo
-      .createQueryBuilder('feedback')
-      .innerJoin('feedback.library', 'library')
-      .innerJoin('feedback.user', 'user')
-      .where('library.adminId = :adminId', { adminId })
-      .orderBy('feedback.createdAt', 'DESC')
-      .take(5)
-      .getMany();
+    for (const booking of bookings) {
+      if (!booking.planId) continue;
 
-    // ======================
-    // FINAL RESPONSE
-    // ======================
+      const plan = await this.priceRepo.findOne({
+        where: {
+          id: booking.planId,
+        },
+      });
+
+      if (plan) {
+        totalRevenue += Number(plan.price);
+      }
+    }
+
+    const recentBookings = await this.bookingRepo.find({
+      where: {
+        libraryId: In(libraryIds),
+      },
+      
+      take: 5,
+    });
+
+    const recentFeedbacks = await this.feedbackRepo.find({
+      where: {
+        libraryId: In(libraryIds),
+      },
+      order: {
+        createdAt: 'DESC',
+      },
+      take: 5,
+    });
 
     return {
       overview: {
@@ -121,7 +126,6 @@ export class DashboardService {
         activeBookings,
         totalRevenue,
       },
-
       recentBookings,
       recentFeedbacks,
     };

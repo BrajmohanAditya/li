@@ -2,11 +2,11 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Admin } from './entities/admin.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { S3Service } from 'src/common/s3/s3.service';
+import { Admin } from './entities/admin.entity';
 
 @Injectable()
 export class AdminsService {

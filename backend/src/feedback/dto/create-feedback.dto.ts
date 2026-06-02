@@ -1,27 +1,19 @@
-import {
-  IsNotEmpty,
-  IsString,
-  IsNumber,
-  Min,
-  Max,
-} from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, IsUUID } from "class-validator";
 
 export class CreateFeedbackDto {
+  @IsUUID()
   @IsNotEmpty()
-  @IsString()
   userId!: string;
 
+  @IsUUID()
   @IsNotEmpty()
-  @IsString()
   libraryId!: string;
 
-  @IsNotEmpty()
   @IsNumber()
-  @Min(1)
-  @Max(5)
+  @IsNotEmpty()
   rating!: number;
 
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
   message!: string;
 }

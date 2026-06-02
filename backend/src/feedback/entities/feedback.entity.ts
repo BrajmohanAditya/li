@@ -1,41 +1,31 @@
-import {
-    Column,
-    CreateDateColumn,
-    Entity,
-    PrimaryGeneratedColumn,
-    ManyToOne,
-    JoinColumn,
-  } from 'typeorm';
-  
-  import { User } from 'src/users/entities/user.entity';
-  import { Library } from 'src/librarys/entities/library.entity';
-  
-  
-  @Entity('feedback')
-  export class Feedback {
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "src/users/entities/user.entity";
+import { Library } from "src/librarys/entities/library.entity";
+
+@Entity('feedback')
+export class Feedback {
     @PrimaryGeneratedColumn('uuid')
-    id!: string;
+    id!: string
+
+    @Column({ type: 'uuid', nullable: true })
+    userId!: string
+
   
-    @ManyToOne(() => User, {
-      nullable: true,
-      onDelete: 'CASCADE',
-    })
-    @JoinColumn({ name: 'userId' })
-    user!: User;
-  
-    @ManyToOne(() => Library, {
-      nullable: true,
-      onDelete: 'CASCADE',
-    })
+
+    @Column({ type: 'uuid', nullable: true })
+    libraryId!: string
+
+    @ManyToOne(() => Library)
     @JoinColumn({ name: 'libraryId' })
-    library!: Library;
-  
+    library!: Library
+
     @Column()
-    rating!: number;
-  
+    rating!: number
+
     @Column({ type: 'text' })
-    message!: string;
-  
+    message!: string
+
     @CreateDateColumn()
     createdAt!: Date;
-  }
+
+}

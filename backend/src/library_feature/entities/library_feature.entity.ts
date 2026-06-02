@@ -9,7 +9,7 @@ export class LibraryFeature {
     @Column()
     featureName!: string;
 
-    @Column()
+    @Column({type: 'uuid'})
     libraryId!: string;
 
     
@@ -18,4 +18,6 @@ export class LibraryFeature {
     })
     @JoinColumn({ name: 'libraryId' })
     library!: Library;
+
+    
 }

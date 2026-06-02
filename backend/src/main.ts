@@ -1,32 +1,27 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import helmet from 'helmet';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common/pipes/validation.pipe';
+import { DocumentBuilder } from 'node_modules/@nestjs/swagger/dist/document-builder';
+import { SwaggerModule } from 'node_modules/@nestjs/swagger/dist/swagger-module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const port = process.env.PORT || 3000;
-
-  app.use(helmet())
-
-
-  app.useGlobalPipes(new ValidationPipe({
+   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
     forbidNonWhitelisted: true,
     transform: true,
   }));
 
   app.enableCors({
-    origin: ['http://localhost:5173'],
+    origin: ['http://localhost:5173', 'https://li-4q4j.onrender.com'],
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type, Accept, Authorization',
   });
 
-  const config = new DocumentBuilder()
-    .setTitle('library management admin api')
+   const config = new DocumentBuilder()
+    .setTitle('library management superadmin api')
     .setVersion('1.0')
     .addBasicAuth()
     .build()
@@ -35,8 +30,8 @@ async function bootstrap() {
 
   SwaggerModule.setup('api', app, documnet);
 
-  await app.listen(port, '0.0.0.0');
-  console.log(`Server is running on port ${port}`);
+  await app.listen(process.env.PORT ?? 3000);
 
+  console.log(`server is running ${process.env.PORT}`);
 }
 bootstrap();

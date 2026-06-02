@@ -1,31 +1,42 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
+import { Sheet } from './entities/sheet.entity';
 import { CreateSheetDto } from './dto/create-sheet.dto';
 import { UpdateSheetDto } from './dto/update-sheet.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Sheet } from './entities/sheet.entity';
-import { Repository } from 'typeorm';
 import { Library } from 'src/librarys/entities/library.entity';
-
 
 @Injectable()
 export class SheetsService {
   constructor(
     @InjectRepository(Sheet)
-    private sheetRepository: Repository<Sheet>,
+    private readonly sheetRepo: Repository<Sheet>,
+
     @InjectRepository(Library)
-    private libraryRepository: Repository<Library>,
-  ) { }
-  async create(createSheetDto: CreateSheetDto, adminId: string) {
+    private readonly libraryRepository: Repository<Library>,
+  ) {}
+
+  async create(createSheetDto: CreateSheetDto) {
+    if (!createSheetDto) {
+      throw new BadRequestException('Request body is missing');
+    }
+
     const { name, sheetCount, libraryId } = createSheetDto;
 
     const library = await this.libraryRepository.findOne({
-      where: { id: libraryId, admin: { id: adminId } }
+      where: { id: libraryId },
     });
 
     if (!library) {
-      return {
-        message: 'Library not found or you do not have permission',
-      };
+      throw new NotFoundException(
+        `Library with ID ${libraryId} not found`,
+      );
     }
 
     const sheets: Sheet[] = [];
@@ -33,22 +44,19 @@ export class SheetsService {
     for (let i = 1; i <= sheetCount; i++) {
       const sheetNumber = `${name}${i}`;
 
-      const sheet = this.sheetRepository.create({
+      const sheet = this.sheetRepo.create({
         sheetNumber,
-        library: {
-          id: libraryId,
-        },
+        libraryId,
       });
 
       sheets.push(sheet);
     }
 
-    const data = await this.sheetRepository.save(sheets);
+    const data = await this.sheetRepo.save(sheets);
 
     return {
       message: 'Sheets created successfully',
       totalSheets: data.length,
-
       sheets: data.map((sheet, index) => ({
         sheetId: sheet.id,
         sheetName: name,
@@ -59,86 +67,51 @@ export class SheetsService {
     };
   }
 
+  async findAll() {
+    return await this.sheetRepo.find();
+  }
 
-  async findAll(adminId: string) {
-    const sheets = await this.sheetRepository.find({
+  async findOne(id: string) {
+    const sheet = await this.sheetRepo.findOne({
+      where: { id },
+    });
+
+    if (!sheet) {
+      throw new NotFoundException('Sheet not found');
+    }
+
+    return sheet;
+  }
+
+  async findByLibraryId(libraryId: string) {
+    const sheets = await this.sheetRepo.find({
       where: {
-        library: {
-          admin: { id: adminId }
-        }
+        libraryId,
       },
-      relations: ['library']
     });
 
-    return {
-      message: 'Sheets found successfully',
-      sheets,
-    }
+    return sheets.map((sheet) => ({
+      id: sheet.id,
+      sheetNumber: sheet.sheetNumber,
+      isAvailable: sheet.isAvailable,
+    }));
   }
 
-  async findOne(id: string, adminId: string) {
-    const sheet = await this.sheetRepository.findOne({
-      where: {
-        id,
-        library: {
-          admin: { id: adminId }
-        }
-      },
-      relations: ['library']
-    });
+  async update(id: string, updateSheetDto: UpdateSheetDto) {
+    const sheet = await this.findOne(id);
 
-    if (!sheet) {
-      return {
-        message: 'Sheet not found or you do not have permission',
-      };
-    }
+    Object.assign(sheet, updateSheetDto);
 
-    return {
-      message: 'Sheet found successfully',
-      sheet,
-    }
+    return await this.sheetRepo.save(sheet);
   }
 
-  async update(id: string, updateSheetDto: UpdateSheetDto, adminId: string) {
-    const sheet = await this.sheetRepository.findOne({
-      where: {
-        id,
-        library: {
-          admin: { id: adminId }
-        }
-      }
-    });
+  async remove(id: string) {
+    const sheet = await this.findOne(id);
 
-    if (!sheet) {
-      return {
-        message: 'Sheet not found or you do not have permission',
-      };
-    }
-
-    return `This action updates a #${id} sheet`;
-  }
-
-   async remove(id: string, adminId: string) {
-    const sheet = await this.sheetRepository.findOne({
-      where: {
-        id,
-        library: {
-          admin: { id: adminId }
-        }
-      }
-    });
-
-    if (!sheet) {
-      return {
-        message: 'Sheet not found or you do not have permission',
-      };
-    }
-
-    const result = await this.sheetRepository.delete(id);
+    await this.sheetRepo.remove(sheet);
 
     return {
       message: 'Sheet deleted successfully',
-      result,
     };
   }
 }

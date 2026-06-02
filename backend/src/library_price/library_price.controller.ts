@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, Put } from '@nestjs/common';
 import { LibraryPriceService } from './library_price.service';
 import { CreateLibraryPriceDto } from './dto/create-library_price.dto';
 import { UpdateLibraryPriceDto } from './dto/update-library_price.dto';
@@ -8,27 +8,27 @@ export class LibraryPriceController {
   constructor(private readonly libraryPriceService: LibraryPriceService) {}
 
   @Post()
-  create(@Req() req: any, @Body() createLibraryPriceDto: CreateLibraryPriceDto) {
-     const adminId = req.admins.id;
-     return this.libraryPriceService.create(createLibraryPriceDto, adminId);
+  create(@Body() createLibraryPriceDto: CreateLibraryPriceDto) {
+    return this.libraryPriceService.create(createLibraryPriceDto);
   }
 
-
-  @Get('/library/:id')
-  findOne(@Req() req: any, @Param('id') id: string) {
-    const adminId = req.admins.id;
-    return this.libraryPriceService.findByLibraryId(id, adminId);
+  @Get()
+  findAll() {
+    return this.libraryPriceService.findAll();
   }
 
-  @Patch(':id')
-  update(@Req() req: any, @Param('id') id: string, @Body() updateLibraryPriceDto: UpdateLibraryPriceDto) {
-    const adminId = req.admins.id;
-    return this.libraryPriceService.update(id, updateLibraryPriceDto, adminId);
+  @Get(':id')
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return this.libraryPriceService.findOne(id);
+  }
+
+  @Put(':id')
+  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateLibraryPriceDto: UpdateLibraryPriceDto) {
+    return this.libraryPriceService.update(id, updateLibraryPriceDto);
   }
 
   @Delete(':id')
-  remove(@Req() req: any, @Param('id') id: string) {
-    const adminId = req.admins.id;
-    return this.libraryPriceService.remove(id, adminId);
+  remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.libraryPriceService.remove(id);
   }
 }

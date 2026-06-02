@@ -22,11 +22,13 @@ export class AdminsController {
 
   @Post('signup')
   create(@Body() createAdminDto: CreateAdminDto) {
+    
     return this.adminsService.signup(createAdminDto);
   }
 
   @Post('login')
   login(@Body() loginDto: LoginAdminDto) {
+  
     return this.adminsService.login(loginDto.email, loginDto.password);
   }
 

@@ -1,79 +1,45 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  Req,
-} from '@nestjs/common';
-
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, Put } from '@nestjs/common';
 import { BookingsService } from './bookings.service';
-
 import { CreateBookingDto } from './dto/create-booking.dto';
-
 import { UpdateBookingDto } from './dto/update-booking.dto';
-
-import { VerifyPaymentDto } from './dto/verify-payment.dto';
 
 @Controller('bookings')
 export class BookingsController {
-  constructor(private readonly bookingsService: BookingsService) {}
+  constructor(private readonly bookingsService: BookingsService) { }
 
-  
+  @Get()
+  findAll() {
+    return this.bookingsService.findAll();
+  }
 
- 
+  @Get(':id')
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return this.bookingsService.findOne(id);
+  }
 
-  @Post('manual')
+  @Get('library/:libraryId')
+  findByLibraryId(@Param('libraryId', ParseUUIDPipe) libraryId: string) {
+    return this.bookingsService.findBookingByLibraryId(libraryId);
+  }
+
+    @Post('manual')
   createManualBooking(
-    @Req() req: any,
+    
     @Body()
     createBookingDto: CreateBookingDto,
   ) {
-    const adminId = req.admins.id;
-    return this.bookingsService.createManualBooking(createBookingDto, adminId);
+    
+    return this.bookingsService.createManualBooking(createBookingDto);
   }
 
-  @Get()
-  findAll(@Req() req: any) {
-    const adminId = req.admins.id;
-    return this.bookingsService.findAll(adminId);
-  }
 
-  @Post('extend/:bookingId/:planId')
-  extendBooking(
-    @Req() req: any,
-    @Param('bookingId')
-    bookingId: string,
-
-    @Param('planId')
-    planId: string,
-  ) {
-    const adminId = req.admins.id;
-    return this.bookingsService.extendBooking(bookingId, planId, adminId);
-  }
-
-  @Patch(':id')
-  update(
-    @Req() req: any,
-    @Param('id')
-    id: string,
-
-    @Body()
-    updateBookingDto: UpdateBookingDto,
-  ) {
-    const adminId = req.admins.id;
-    return this.bookingsService.update(id, updateBookingDto, adminId);
+  @Put(':id')
+  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateBookingDto: UpdateBookingDto) {
+    return this.bookingsService.update(id, updateBookingDto);
   }
 
   @Delete(':id')
-  remove(
-    @Req() req: any,
-    @Param('id')
-    id: string,
-  ) {
-    const adminId = req.admins.id;
-    return this.bookingsService.remove(id, adminId);
+  remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.bookingsService.remove(id);
   }
 }

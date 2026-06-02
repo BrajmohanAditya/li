@@ -27,7 +27,7 @@ export const getAllSheetsApi = async () => {
 
 export const getSheetByIdApi = async (id) => {
     const token = localStorage.getItem("token");
-    const res = await axios.get(`${baseUrl}/sheets/${id}`, {
+    const res = await axios.get(`${baseUrl}/sheets/library/${id}`, {
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`

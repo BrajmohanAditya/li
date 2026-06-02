@@ -1,39 +1,40 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, Put } from '@nestjs/common';
 import { SheetsService } from './sheets.service';
 import { CreateSheetDto } from './dto/create-sheet.dto';
 import { UpdateSheetDto } from './dto/update-sheet.dto';
+
 
 @Controller('sheets')
 export class SheetsController {
   constructor(private readonly sheetsService: SheetsService) {}
 
   @Post()
-  create(@Req() req: any, @Body() createSheetDto: CreateSheetDto) {
-    const adminId = req.admins.id;
-    return this.sheetsService.create(createSheetDto, adminId);
+  create(@Body() createSheetDto: CreateSheetDto) {
+    return this.sheetsService.create(createSheetDto);
   }
 
   @Get()
-  findAll(@Req() req: any) {
-    const adminId = req.admins.id;
-    return this.sheetsService.findAll(adminId);
+  findAll() {
+    return this.sheetsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Req() req: any, @Param('id') id: string) {
-    const adminId = req.admins.id;
-    return this.sheetsService.findOne(id, adminId);
-  } 
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return this.sheetsService.findOne(id);
+  }
 
-  @Patch(':id')
-  update(@Req() req: any, @Param('id') id: string, @Body() updateSheetDto: UpdateSheetDto) {
-    const adminId = req.admins.id;
-    return this.sheetsService.update(id, updateSheetDto, adminId);
+  @Get('library/:libraryId')
+  findByLibraryId(@Param('libraryId', ParseUUIDPipe) libraryId: string) {
+    return this.sheetsService.findByLibraryId(libraryId);
+  }
+
+  @Put(':id')
+  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateSheetDto: UpdateSheetDto) {
+    return this.sheetsService.update(id, updateSheetDto);
   }
 
   @Delete(':id')
-  remove(@Req() req: any, @Param('id') id: string) {
-    const adminId = req.admins.id;
-    return this.sheetsService.remove(id, adminId);
+  remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.sheetsService.remove(id);
   }
 }

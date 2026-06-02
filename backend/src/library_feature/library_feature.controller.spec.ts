@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { LibraryFeatureController } from './library-feature.controller';
-import { LibraryFeatureService } from './library-feature.service';
+import { LibraryFeatureController } from './library_feature.controller';
+import { LibraryFeatureService } from './library_feature.service';
 
 describe('LibraryFeatureController', () => {
   let controller: LibraryFeatureController;

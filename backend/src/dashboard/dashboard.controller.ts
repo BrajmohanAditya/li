@@ -7,7 +7,7 @@ export class DashboardController {
 
   @Get()
   getDashboard(@Req() req: any) {
-    const adminId = req.user?.id; // assuming JWT auth
+    const adminId = req.admins?.id; // assuming JWT auth
     return this.dashboardService.getDashboardData(adminId);
   }
 }

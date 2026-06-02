@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Plus, Search, LayoutGrid, List, Loader2, ChevronDown, CheckCircle2, Layers } from 'lucide-react';
 import { getAllLibrariesHook } from '../../hooks/library.hook';
-import { getAllSheetsHook, createSheetHook, deleteSheetHook, updateSheetHook } from '../../hooks/seat.create.hook';
+import { getSheetByIdHook, createSheetHook, deleteSheetHook, updateSheetHook } from '../../hooks/seat.create.hook';
 import CreateSheetModal from '../../components/CreateSheetModal';
 import EditSheetModal from '../../components/EditSheetModal';
 
@@ -17,8 +17,8 @@ const CreateSeatPage = () => {
   const { mutate: createSheet, isPending: isCreating } = createSheetHook();
   const { mutate: deleteSheet } = deleteSheetHook();
   const { mutate: updateSheet, isPending: isUpdating } = updateSheetHook();
-  const { data: sheetsData, isLoading: isLoadingSheets } = getAllSheetsHook();
-  const allSheets = sheetsData?.sheets || [];
+  const { data: sheetsData, isLoading: isLoadingSheets } = getSheetByIdHook(selectedLibrary);
+  const allSheets = Array.isArray(sheetsData) ? sheetsData : (sheetsData?.sheets || []);
 
   const handleCreateSubmit = (data, resetForm) => {
     createSheet(data, {
@@ -43,9 +43,8 @@ const CreateSeatPage = () => {
   
   const selectedLibraryObj = libraries.find(lib => lib.id === selectedLibrary);
 
-  // Filter sheets for the currently selected library and the sheet search term
+  // Filter sheets for the sheet search term (API already filters by library)
   const filteredSheets = allSheets.filter(sheet => {
-    if (sheet.library?.id !== selectedLibrary) return false;
     if (sheetSearchTerm) {
       return sheet.sheetNumber?.toLowerCase().includes(sheetSearchTerm.toLowerCase());
     }

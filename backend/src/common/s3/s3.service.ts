@@ -46,15 +46,15 @@ export class S3Service {
 
     const key = `${folder}/${fileName}`;
 
-    await this.s3.send(
-      new PutObjectCommand({
-        Bucket: this.bucket,
-        Key: key,
-        Body: file.buffer,
-        ContentType: file.mimetype,
-        ACL: 'public-read',
-      }),
-    );
+   await this.s3.send(
+  new PutObjectCommand({
+    Bucket: this.bucket,
+    Key: key,
+    Body: file.buffer,
+    ContentType: file.mimetype,
+    ACL: 'public-read',
+  }),
+);
 
     return `https://${this.bucket}.s3.${this.region}.amazonaws.com/${key}`;
   }

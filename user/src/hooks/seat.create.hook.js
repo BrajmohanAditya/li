@@ -19,13 +19,13 @@ export const createSheetHook = () => {
   });
 };
 
-export const getAllSheetsHook = () => {
+export const getAllSheetsHook = (enabledFlag = true) => {
   const token = localStorage.getItem("token");
 
   return useQuery({
     queryKey: ["get-sheets"],
     queryFn: getAllSheetsApi,
-    enabled: !!token,
+    enabled: !!token && enabledFlag,
   });
 };
 

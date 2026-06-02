@@ -1,84 +1,108 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+
 import { InjectRepository } from '@nestjs/typeorm';
+
 import { User } from './entities/user.entity';
+
 import { Repository } from 'typeorm';
-import * as bcrypt from 'bcrypt';
-import * as jwt from 'jsonwebtoken';
+
+import bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
-
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>
+    private readonly userRepo: Repository<User>,
   ) { }
 
-  async signup(createUserDto: CreateUserDto) {
-    const user = this.userRepository.create(createUserDto);
+  async create(createUserDto: CreateUserDto) {
+    const isMatch = await this.userRepo.findOne({
+      where: {
+        email: createUserDto.email,
+      },
+    });
 
-    const existingUser = await this.userRepository.findOne({ where: { email: createUserDto.email } });
-
-    if (existingUser) {
-      throw new BadRequestException("Email already exists");
+    if (isMatch) {
+      throw new BadRequestException('User already exists');
     }
 
+    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
 
+    const user = this.userRepo.create({
+      ...createUserDto,
+      password: hashedPassword,
+    });
 
-    const hashPassword = await bcrypt.hash(createUserDto.password, 10);
-
-    user.password = hashPassword;
-
-    const data = await this.userRepository.save(user);
-
-
+    const data = await this.userRepo.save(user);
 
     const { password, ...result } = data;
 
     return {
-      message: "User created successfully",
-
-      data: result
+      message: 'User created successfully',
+      data: result,
     };
-
-
   }
 
   async findAll() {
-    const users = await this.userRepository.find();
+    const users = await this.userRepo.find();
+
+    const result = users.map(({ password, ...rest }) => rest);
 
     return {
-      message: "Get all Users",
-      data: users
-    }
+      message: 'Fetch all users',
+      data: result,
+    };
   }
 
+ 
 
   async update(id: string, updateUserDto: UpdateUserDto) {
-    const user = this.userRepository.findOne({ where: { id } });
+    const user = await this.userRepo.findOne({
+      where: { id },
+    });
 
     if (!user) {
-      throw new BadRequestException("User not found");
+      throw new NotFoundException('User not found');
     }
-    const data = await this.userRepository.update(id, updateUserDto);
+
+    if (updateUserDto.password) {
+      updateUserDto.password = await bcrypt.hash(updateUserDto.password, 10);
+    }
+
+    await this.userRepo.update(id, updateUserDto);
+
+    const updatedUser = await this.userRepo.findOne({
+      where: { id },
+    });
+
+    const { password, ...result } = updatedUser!;
 
     return {
-      message: "User updated successfully",
-      data
+      message: 'User updated successfully',
+      data: result,
     };
-
   }
 
   async remove(id: string) {
-    const user = this.userRepository.findOne({ where: { id } });
+    const user = await this.userRepo.findOne({
+      where: { id },
+    });
+
     if (!user) {
-      throw new BadRequestException("User not found");
+      throw new NotFoundException('User not found');
     }
-    const data = await this.userRepository.delete(id);
+
+    await this.userRepo.delete(id);
+
     return {
-      message: "User removed successfully",
-      data
+      message: 'User deleted successfully',
     };
   }
 }

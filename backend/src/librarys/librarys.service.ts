@@ -1,179 +1,164 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-
-import { Library } from './entities/library.entity';
 import { CreateLibraryDto } from './dto/create-library.dto';
 import { UpdateLibraryDto } from './dto/update-library.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Library } from './entities/library.entity';
+import { Repository } from 'typeorm';
 import { S3Service } from 'src/common/s3/s3.service';
 
 @Injectable()
 export class LibrarysService {
   constructor(
     @InjectRepository(Library)
-    private readonly libraryRepository: Repository<Library>,
-    private readonly s3Service: S3Service,
-  ) { }
+    private readonly libraryRepo: Repository<Library>,
+    private readonly s3service: S3Service,
+  ) {}
 
+  // =========================
+  // CREATE LIBRARY (ADMIN ONLY)
+  // =========================
   async create(
-    createLibraryDto: CreateLibraryDto,
+    createLibraryDto: any,
     files: Express.Multer.File[],
     adminId: string,
   ) {
+    createLibraryDto.latitude = Number(createLibraryDto.latitude);
+    createLibraryDto.longitude = Number(createLibraryDto.longitude);
 
     let imageUrls: string[] = [];
 
     if (files && files.length > 0) {
       imageUrls = await Promise.all(
         files.map((file) =>
-          this.s3Service.uploadFile(file, 'libraries'),
+          this.s3service.uploadFile(file, 'libraries'),
         ),
       );
     }
 
-    const library = this.libraryRepository.create({
+    const library = this.libraryRepo.create({
       ...createLibraryDto,
       images: imageUrls,
-      admin: { id: adminId },
+      adminId, // ✅ important: ownership
     });
 
-    const data = await this.libraryRepository.save(library);
+    return await this.libraryRepo.save(library);
+  }
+
+  // =========================
+  // GET ALL (ONLY LOGGED ADMIN)
+  // =========================
+  async findAll(adminId: string, page: number = 1, limit: number = 10) {
+    const [librarys, total] = await this.libraryRepo.findAndCount({
+      where: {
+        adminId, // ✅ restrict data per admin
+      },
+      skip: (page - 1) * limit,
+      take: limit,
+      order: {
+        createdAt: 'DESC',
+      },
+    });
 
     return {
-      message: 'Library created successfully',
-      data,
+      message: 'Fetch All Libraries',
+      data: librarys,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
     };
   }
 
+  // =========================
+  // SHORT DATA (ADMIN FILTER)
+  // =========================
   async findAllShortData(adminId: string) {
-    const librarys = await this.libraryRepository.find({
-      where: { admin: { id: adminId } },
+    const librarys = await this.libraryRepo.find({
+      where: { adminId },
       select: {
         id: true,
         name: true,
-        address: true
+        address: true,
       },
     });
+
     return {
       message: 'Fetch All Library ShortData',
       data: librarys,
     };
   }
 
-  async findAll(adminId: string) {
-    const data = await this.libraryRepository.find({
-      where: { admin: { id: adminId } },
-      relations: ['sheets'],
-    });
-
-    return {
-      message: 'Libraries retrieved successfully',
-      data,
-    };
-  }
-
+  // =========================
+  // GET ONE (SECURE)
+  // =========================
   async findOne(id: string, adminId: string) {
-    const data = await this.libraryRepository.findOne({
-      where: { id, admin: { id: adminId } },
-      relations: ['sheets'],
+    return await this.libraryRepo.findOne({
+      where: {
+        id,
+        adminId,
+      },
     });
-
-    if (!data) {
-      return {
-        message: 'Library not found or you do not have permission',
-      };
-    }
-
-    return {
-      message: 'Library retrieved successfully',
-      data,
-    };
   }
 
-  async update(id: string, updateLibraryDto: UpdateLibraryDto, adminId: string) {
-    const library = await this.libraryRepository.findOne({
-      where: { id, admin: { id: adminId } },
+  // =========================
+  // ASSIGN LIBRARY TO ADMIN
+  // =========================
+  async assignLibraryToAdmin(libraryId: string, adminId: string) {
+    const library = await this.libraryRepo.findOne({
+      where: { id: libraryId },
     });
 
     if (!library) {
-      return {
-        message: 'Library not found or you do not have permission',
-      };
+      throw new Error('Library not found');
     }
 
-    await this.libraryRepository.update(id, updateLibraryDto);
+    library.adminId = adminId;
 
-    const updatedLibrary = await this.libraryRepository.findOne({
-      where: { id },
-    });
-
-    return {
-      message: 'Library updated successfully',
-      data: updatedLibrary,
-    };
+    return await this.libraryRepo.save(library);
   }
 
-  async remove(id: string, adminId: string) {
-    const library = await this.libraryRepository.findOne({
-      where: { id, admin: { id: adminId } },
-    });
-
-    if (!library) {
-      return {
-        message: 'Library not found or you do not have permission',
-      };
-    }
-
-    await this.libraryRepository.delete(id);
-
-    return {
-      message: 'Library removed successfully',
-    };
-  }
-
-  async findNearestLibraries(
-    latitude: number,
-    longitude: number,
-    radius: number = 5,
+  // =========================
+  // UPDATE (SECURE)
+  // =========================
+  async update(
+    id: string,
+    adminId: string,
+    updateLibraryDto: UpdateLibraryDto,
   ) {
-    const query = `
-    (
-      6371 *
-      acos(
-        cos(radians(:latitude)) *
-        cos(radians(library.latitude)) *
-        cos(radians(library.longitude) - radians(:longitude)) +
-        sin(radians(:latitude)) *
-        sin(radians(library.latitude))
-      )
-    )
-  `;
+    const library = await this.libraryRepo.findOne({
+      where: {
+        id,
+        adminId,
+      },
+    });
 
-    const libraries = await this.libraryRepository
-      .createQueryBuilder('library')
-      .addSelect(query, 'distance')
-      .where(`${query} <= :radius`)
-      .setParameters({
-        latitude,
-        longitude,
-        radius,
-      })
-      .orderBy('distance', 'ASC')
-      .getRawAndEntities();
+    if (!library) {
+      throw new Error('Library not found');
+    }
+
+    await this.libraryRepo.update(id, updateLibraryDto);
+
+    return await this.findOne(id, adminId);
+  }
+
+  // =========================
+  // DELETE (SECURE)
+  // =========================
+  async remove(id: string, adminId: string) {
+    const library = await this.libraryRepo.findOne({
+      where: {
+        id,
+        adminId,
+      },
+    });
+
+    if (!library) {
+      throw new Error('Library not found');
+    }
+
+    await this.libraryRepo.delete(id);
 
     return {
-      message: `Libraries within ${radius} KM fetched successfully`,
-      totalLibraries: libraries.entities.length,
-
-      data: libraries.entities.map((library, index) => ({
-        id: library.id,
-        name: library.name,
-        address: library.address,
-        city: library.city,
-
-        distance:
-          Number(libraries.raw[index].distance).toFixed(2) + ' KM',
-      })),
+      message: 'Library deleted successfully',
     };
   }
 }

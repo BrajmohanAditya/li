@@ -1,6 +1,8 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Library } from "src/librarys/entities/library.entity";
-
+import { Library } from "src/librarys/entities/library.entity"
+import { Column } from "typeorm/browser/decorator/columns/Column.js"
+import { PrimaryGeneratedColumn } from "typeorm/browser/decorator/columns/PrimaryGeneratedColumn.js"
+import { Entity } from "typeorm/browser/decorator/entity/Entity.js"
+import { OneToMany } from "typeorm/browser/decorator/relations/OneToMany.js"
 @Entity('admins')
 export class Admin {
     @PrimaryGeneratedColumn('uuid')
@@ -12,13 +14,11 @@ export class Admin {
     @Column()
     password!: string
 
-    @Column({nullable: true})
+    @Column({ nullable: true })
     number!: string
 
-    @Column({nullable : true})
+    @Column({ nullable: true })
     image!: string
 
-    @OneToMany(() => Library, (library) => library.admin)
-    libraries!: Library[];
-
+   
 }

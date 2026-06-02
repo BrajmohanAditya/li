@@ -1,19 +1,39 @@
-import { IsNotEmpty, IsUUID } from 'class-validator';
+import { IsDateString, IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class CreateBookingDto {
-  @IsNotEmpty()
   @IsUUID()
+  @IsNotEmpty()
   userId!: string;
 
-  @IsNotEmpty()
   @IsUUID()
+  @IsNotEmpty()
   libraryId!: string;
 
-  @IsNotEmpty()
   @IsUUID()
+  @IsNotEmpty()
   sheetId!: string;
 
-  @IsNotEmpty()
   @IsUUID()
+  @IsNotEmpty()
   planId!: string;
+
+  @IsUUID()
+  @IsOptional()
+  featureId?: string;
+
+  @IsDateString()
+  @IsNotEmpty()
+  startTime!: string;
+
+  @IsDateString()
+  @IsNotEmpty()
+  endTime!: string;
+
+  @IsEnum(['ACTIVE', 'EXPIRED', 'CANCELLED'])
+  @IsOptional()
+  status?: 'ACTIVE' | 'EXPIRED' | 'CANCELLED';
+
+  @IsEnum(['SUCCESS', 'PENDING'])
+  @IsOptional()
+  paymentStatus?: 'SUCCESS' | 'PENDING';
 }

@@ -1,22 +1,15 @@
-import {
-  IsNotEmpty,
-  IsString,
-  IsNumber,
-  Min,
-} from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsNotEmpty, IsNumber, IsString, IsUUID, Min } from 'class-validator';
 
 export class CreateSheetDto {
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
   name!: string;
 
-  @Type(() => Number)
   @IsNumber()
   @Min(1)
   sheetCount!: number;
 
+  @IsUUID()
   @IsNotEmpty()
-  @IsString()
   libraryId!: string;
 }

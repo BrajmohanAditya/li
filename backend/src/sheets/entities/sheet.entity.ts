@@ -20,9 +20,7 @@ export class Sheet {
   })
   isAvailable!: boolean;
 
-  @ManyToOne(() => Library, (library) => library.sheets, {
-    onDelete: 'CASCADE',
-  })
-  library!: Library;
+ @Column({ type: 'uuid' })
+  libraryId!: string;
   
 }

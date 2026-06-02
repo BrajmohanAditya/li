@@ -1,108 +1,102 @@
-import { Injectable, BadRequestException, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Feedback } from './entities/feedback.entity';
-import { CreateFeedbackDto } from './dto/create-feedback.dto';
-import { Library } from 'src/librarys/entities/library.entity';
 import { User } from 'src/users/entities/user.entity';
+
 
 @Injectable()
 export class FeedbackService {
   constructor(
     @InjectRepository(Feedback)
-    private readonly feedbackRepo: Repository<Feedback>,
-
-    @InjectRepository(Library)
-    private readonly libraryRepo: Repository<Library>,
+    private feedbackRepository: Repository<Feedback>,
 
     @InjectRepository(User)
-    private readonly userRepo: Repository<User>,
+    private userRepository: Repository<User>,
   ) { }
 
-  async create(dto: CreateFeedbackDto) {
-    try {
+  async create(createFeedbackDto: any) {
+    const feedback = this.feedbackRepository.create(createFeedbackDto);
+    return this.feedbackRepository.save(feedback);
+  }
 
-      const library = await this.libraryRepo.findOne({
-        where: {
-          id: dto.libraryId,
-        },
-      });
+  async findAll() {
+    const feedbacks = await this.feedbackRepository.find();
 
-      if (!library) {
-        throw new BadRequestException('Library not found');
-      }
+    const users = await this.userRepository.find();
 
-      const user = await this.userRepo.findOne({
-        where: {
-          id: dto.userId,
-        },
-      });
-
-      if (!user) {
-        throw new BadRequestException('User not found');
-      }
-
-      const feedback = this.feedbackRepo.create(dto);
-
-      const data = await this.feedbackRepo.save(feedback);
+    return feedbacks.map((fb) => {
+      const user = users.find((u) => u.id === fb.userId);
 
       return {
-        message: 'Feedback added successfully',
-
-        data,
+        id: fb.id,
+        message: fb.message,
+        userId: fb.userId,
+        user: user
+          ? {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+          }
+          : null,
+        createdAt: fb.createdAt,
       };
+    });
+  }
 
-    } catch (error) {
-      throw new InternalServerErrorException(error)
+  async findByLibraryId(libraryId: string) {
+    const feedbacks = await this.feedbackRepository.find({
+      where: { libraryId },
+    });
+    return {
+      message: 'Feedbacks for library',
+      data: feedbacks,
     }
   }
 
-
-  async findByLibrary(libraryId: string) {
-    const feedbacks = await this.feedbackRepo.find({
-      where: { library: { id: libraryId } },
-
-      order: {
-        createdAt: 'DESC',
-      },
+  async update(id: string, updateFeedbackDto: any) {
+    const feedback = await this.feedbackRepository.findOne({
+      where: { id },
     });
 
-    const totalRatings = feedbacks.reduce((sum, item) => sum + item.rating, 0);
+    if (!feedback) {
+      throw new NotFoundException(`Feedback with id ${id} not found`);
+    }
 
-    const averageRating =
-      feedbacks.length > 0 ? totalRatings / feedbacks.length : 0;
+    Object.assign(feedback, updateFeedbackDto);
+
+    await this.feedbackRepository.save(feedback);
 
     return {
-      message: 'Library feedback retrieved successfully',
+      message: 'Feedback updated successfully',
+      data: feedback,
+    }
+  }
 
-      totalFeedbacks: feedbacks.length,
+  async findOne(id: string) {
+    const fb = await this.feedbackRepository.findOne({
+      where: { id },
+    });
 
-      averageRating: averageRating.toFixed(1),
+    if (!fb) return null;
 
-      data: feedbacks,
+    const user = await this.userRepository.findOne({
+      where: { id: fb.userId },
+    });
+
+    return {
+      ...fb,
+      user: user
+        ? {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+        }
+        : null,
     };
   }
 
   async remove(id: string) {
-    try {
-      const isMatch = await this.feedbackRepo.findOne({ where: { id } })
-
-      if (!isMatch) {
-        throw new BadRequestException("message not found")
-      }
-
-      await this.feedbackRepo.delete(id)
-
-      return {
-        message: "message delete sucessfully"
-      }
-
-    } catch (error) {
-
-      throw new InternalServerErrorException(error)
-
-    }
+    return this.feedbackRepository.delete(id);
   }
-
-
 }

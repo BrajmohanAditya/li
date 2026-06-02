@@ -1,11 +1,11 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
 export class CreateLibraryFeatureDto {
+  @IsUUID()
   @IsNotEmpty()
-  @IsString()
   libraryId!: string;
 
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
   featureName!: string;
 }

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Calendar, CheckCircle, CreditCard, BookOpen, Book, ChevronDown, Loader2 } from 'lucide-react';
 import { getAllLibrariesHook } from '../../hooks/library.hook';
 import { getAllStudentsHook } from '../../hooks/add.student.hook';
-import { getAllSheetsHook } from '../../hooks/seat.create.hook';
+import { getSheetByIdHook } from '../../hooks/seat.create.hook';
 import { createBookingHook } from '../../hooks/book.seat.hook';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
@@ -24,9 +24,9 @@ const SeatManagement = () => {
   const students = studentsData?.data || [];
 
   // Fetch sheets
-  const { data: sheetsData } = getAllSheetsHook();
-  const allSheets = sheetsData?.sheets || [];
-  const librarySheets = allSheets.filter(s => s.library?.id === selectedLibrary && s.isAvailable);
+  const { data: sheetsData } = getSheetByIdHook(selectedLibrary);
+  const allSheets = Array.isArray(sheetsData) ? sheetsData : (sheetsData?.sheets || []);
+  const librarySheets = allSheets.filter(s => s.isAvailable);
 
   // Fetch plans dynamically
   const { data: plansData, isLoading: isLoadingPlans } = useQuery({
