@@ -1,13 +1,69 @@
 import React, { useState } from 'react';
 import { Calendar, CheckCircle, CreditCard, BookOpen, Book, ChevronDown, Loader2 } from 'lucide-react';
 import { getAllLibrariesHook } from '../../hooks/library.hook';
+import { getAllStudentsHook } from '../../hooks/add.student.hook';
+import { getAllSheetsHook } from '../../hooks/seat.create.hook';
+import { createBookingHook } from '../../hooks/book.seat.hook';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+
+const baseUrl = import.meta.env.VITE_BASE_URL;
 
 const SeatManagement = () => {
   const [selectedLibrary, setSelectedLibrary] = useState('');
+  const [selectedStudent, setSelectedStudent] = useState('');
+  const [selectedSheet, setSelectedSheet] = useState('');
+  const [selectedPlan, setSelectedPlan] = useState('');
   
   // Fetch libraries from the database
   const { data: librariesData, isLoading, isError } = getAllLibrariesHook();
   const libraries = librariesData?.data || [];
+
+  // Fetch students
+  const { data: studentsData } = getAllStudentsHook();
+  const students = studentsData?.data || [];
+
+  // Fetch sheets
+  const { data: sheetsData } = getAllSheetsHook();
+  const allSheets = sheetsData?.sheets || [];
+  const librarySheets = allSheets.filter(s => s.library?.id === selectedLibrary && s.isAvailable);
+
+  // Fetch plans dynamically
+  const { data: plansData, isLoading: isLoadingPlans } = useQuery({
+    queryKey: ['get-plans', selectedLibrary],
+    queryFn: async () => {
+      const token = localStorage.getItem("token");
+      const res = await axios.get(`${baseUrl}/library-price/library/${selectedLibrary}`, {
+        headers: { "Authorization": `Bearer ${token}` },
+        withCredentials: true,
+      });
+      return res.data;
+    },
+    enabled: !!selectedLibrary,
+  });
+  const plans = Array.isArray(plansData) ? plansData : (plansData?.data || []);
+
+  const { mutate: createBooking, isPending: isBooking } = createBookingHook();
+
+  const handleBookSeat = (e) => {
+    e.preventDefault();
+    if (!selectedStudent || !selectedLibrary || !selectedSheet || !selectedPlan) {
+      return;
+    }
+    
+    createBooking({
+      userId: selectedStudent,
+      libraryId: selectedLibrary,
+      sheetId: selectedSheet,
+      planId: selectedPlan
+    }, {
+      onSuccess: () => {
+        setSelectedStudent('');
+        setSelectedSheet('');
+        setSelectedPlan('');
+      }
+    });
+  };
 
   return (
     <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-6">
@@ -86,7 +142,11 @@ const SeatManagement = () => {
             <>
               <select
                 value={selectedLibrary}
-                onChange={(e) => setSelectedLibrary(e.target.value)}
+                onChange={(e) => {
+                  setSelectedLibrary(e.target.value);
+                  setSelectedSheet('');
+                  setSelectedPlan('');
+                }}
                 className="w-full appearance-none bg-slate-50 border border-gray-200 text-slate-700 text-sm rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 cursor-pointer transition-all"
               >
                 <option value="" disabled>Choose a library...</option>
@@ -100,6 +160,93 @@ const SeatManagement = () => {
             </>
           )}
         </div>
+      </div>
+
+      {/* Booking Form Section */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mt-6">
+        <h2 className="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
+          <CheckCircle className="w-5 h-5 text-indigo-600" /> Book a Seat
+        </h2>
+        <form onSubmit={handleBookSeat} className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          {/* Select Student */}
+          <div>
+            <label className="block text-sm font-bold text-slate-700 mb-2">Select Student</label>
+            <div className="relative">
+              <select
+                required
+                disabled={!selectedLibrary}
+                value={selectedStudent}
+                onChange={(e) => setSelectedStudent(e.target.value)}
+                className="w-full appearance-none bg-white border border-gray-200 text-slate-700 text-sm rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 cursor-pointer transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50"
+              >
+                <option value="" disabled>
+                  {!selectedLibrary ? "Select a library first" : "Choose a student..."}
+                </option>
+                {students.map((user) => (
+                  <option key={user.id} value={user.id}>{user.name} ({user.email})</option>
+                ))}
+              </select>
+              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+            </div>
+          </div>
+
+          {/* Select Plan */}
+          <div>
+            <label className="block text-sm font-bold text-slate-700 mb-2">Select Plan</label>
+            <div className="relative">
+              <select
+                required
+                disabled={!selectedLibrary || isLoadingPlans}
+                value={selectedPlan}
+                onChange={(e) => setSelectedPlan(e.target.value)}
+                className="w-full appearance-none bg-white border border-gray-200 text-slate-700 text-sm rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 cursor-pointer transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50"
+              >
+                <option value="" disabled>
+                  {!selectedLibrary ? "Select a library first" : (isLoadingPlans ? 'Loading plans...' : 'Choose a plan...')}
+                </option>
+                {plans.map((plan) => (
+                  <option key={plan.id} value={plan.id}>{plan.name || plan.planType} - ₹{plan.price}</option>
+                ))}
+              </select>
+              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+            </div>
+          </div>
+
+          {/* Select Seat */}
+          <div>
+            <label className="block text-sm font-bold text-slate-700 mb-2">Select Seat</label>
+            <div className="relative">
+              <select
+                required
+                disabled={!selectedLibrary}
+                value={selectedSheet}
+                onChange={(e) => setSelectedSheet(e.target.value)}
+                className="w-full appearance-none bg-white border border-gray-200 text-slate-700 text-sm rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 cursor-pointer transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50"
+              >
+                <option value="" disabled>
+                  {!selectedLibrary ? "Select a library first" : "Choose an available seat..."}
+                </option>
+                {librarySheets.map((sheet) => (
+                  <option key={sheet.id} value={sheet.id}>{sheet.sheetNumber}</option>
+                ))}
+              </select>
+              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+            </div>
+          </div>
+
+          {/* Submit Button */}
+          <div className="md:col-span-3 flex justify-end mt-4">
+            <button
+              type="submit"
+              disabled={isBooking || !selectedLibrary}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-xl font-bold transition-all shadow-sm disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2"
+            >
+              {isBooking && <Loader2 className="w-5 h-5 animate-spin" />}
+              Confirm Booking
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
