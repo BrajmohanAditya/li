@@ -6,7 +6,7 @@ import Login from "../pages/auth/login";
 import ProtectedRoute from "./protected.route.jsx";
 import ManageLibrary from "../pages/user/manage.library.jsx";
 import ManageStudent from "../pages/user/add.student.jsx";
-
+import CreateSeatPage from "../pages/user/create.seat.page.jsx";
 import SeatManagement from "../pages/user/seat.management.jsx";
 
 const MainRoutes = () => {
@@ -19,6 +19,7 @@ const MainRoutes = () => {
           <Route path="/libraries" element={<ManageLibrary />} />
           <Route path="/students" element={<ManageStudent />} />
           <Route path="/bookings" element={<SeatManagement />} />
+          <Route path="/sheets" element={<CreateSeatPage />} />
         </Route>
       </Route>
 
