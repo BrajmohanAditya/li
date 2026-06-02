@@ -28,23 +28,17 @@ import { DashboardModule } from './dashboard/dashboard.module';
         type: 'postgres',
         url: configService.get<string>('DATABASE_URL'),
         autoLoadEntities: true,
-        synchronize: true,
+        synchronize: false,
         ssl: {
           rejectUnauthorized: false,
         },
       }),
     }),
-
     AdminsModule,
-
     LibrarysModule,
-
     SheetsModule,
-
     BookingsModule,
-
     LibraryPriceModule,
-
     LibraryFeatureModule,
     UsersModule,
     FeedbackModule,
@@ -58,7 +52,7 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthMiddleware)
-      .exclude('admins/signup', 'admins/login', 'users/signup', 'register') 
+      .exclude('admins/signup', 'admins/login') 
       .forRoutes('*');
   }
 }

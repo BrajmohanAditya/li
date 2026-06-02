@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UploadedFiles, UseInterceptors, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UploadedFile, UseInterceptors, Req, UploadedFiles } from '@nestjs/common';
 import { LibrarysService } from './librarys.service';
 import { CreateLibraryDto } from './dto/create-library.dto';
 import { UpdateLibraryDto } from './dto/update-library.dto';
@@ -24,6 +24,12 @@ export class LibrarysController {
   findAll(@Req() req: any) {
     const adminId = req.admins.id;
     return this.librarysService.findAll(adminId);
+  }
+
+  @Get('/details')
+  findAllShortData(@Req() req: any) {
+    const adminId = req.admins.id;
+    return this.librarysService.findAllShortData(adminId);
   }
 
   @Get('/nearest')

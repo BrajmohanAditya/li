@@ -1,26 +1,44 @@
-import {
-  IsNotEmpty,
-  IsString,
-  IsNumber,
-  Min,
-} from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID, Min } from 'class-validator';
+
+export enum PlanType {
+  HOURS = 'HOURS',
+  DAYS = 'DAYS',
+  MONTH = 'MONTH',
+}
 
 export class CreateLibraryPriceDto {
+  @IsUUID()
   @IsNotEmpty()
-  @IsString()
   libraryId!: string;
 
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
   planName!: string;
 
-  @IsNotEmpty()
   @IsString()
-  duration!: string;
+  @IsOptional()
+  duration?: string;
 
-  @Type(() => Number)
   @IsNumber()
   @Min(0)
   price!: number;
+
+  @IsString()
+  @IsOptional()
+  slotType?: string;
+
+  @IsString()
+  @IsOptional()
+  startTime?: string;
+  @IsString()
+  @IsOptional()
+  endTime?: string;
+
+  @IsEnum(PlanType)
+  @IsNotEmpty()
+  type!: PlanType;
+
+  @IsNumber()
+  @Min(0)
+  durationValue!: number;
 }

@@ -3,7 +3,7 @@ const baseUrl = import.meta.env.VITE_BASE_URL;
 
 export const addStudentApi = async (payload) => {
     const token = localStorage.getItem("token");
-    const res = await axios.post(`${baseUrl}/users/signup`, payload,
+    const res = await axios.post(`${baseUrl}/users/create`, payload,
         {
             headers: {
                 "Content-Type": "application/json",

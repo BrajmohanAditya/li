@@ -13,18 +13,21 @@ export class LibrarysService {
     @InjectRepository(Library)
     private readonly libraryRepository: Repository<Library>,
     private readonly s3Service: S3Service,
-  ) {}
+  ) { }
 
   async create(
     createLibraryDto: CreateLibraryDto,
     files: Express.Multer.File[],
     adminId: string,
   ) {
+
     let imageUrls: string[] = [];
 
     if (files && files.length > 0) {
       imageUrls = await Promise.all(
-        files.map((file) => this.s3Service.uploadFile(file, 'libraries')),
+        files.map((file) =>
+          this.s3Service.uploadFile(file, 'libraries'),
+        ),
       );
     }
 
@@ -39,6 +42,21 @@ export class LibrarysService {
     return {
       message: 'Library created successfully',
       data,
+    };
+  }
+
+  async findAllShortData(adminId: string) {
+    const librarys = await this.libraryRepository.find({
+      where: { admin: { id: adminId } },
+      select: {
+        id: true,
+        name: true,
+        address: true
+      },
+    });
+    return {
+      message: 'Fetch All Library ShortData',
+      data: librarys,
     };
   }
 
@@ -72,11 +90,7 @@ export class LibrarysService {
     };
   }
 
-  async update(
-    id: string,
-    updateLibraryDto: UpdateLibraryDto,
-    adminId: string,
-  ) {
+  async update(id: string, updateLibraryDto: UpdateLibraryDto, adminId: string) {
     const library = await this.libraryRepository.findOne({
       where: { id, admin: { id: adminId } },
     });
@@ -157,7 +171,8 @@ export class LibrarysService {
         address: library.address,
         city: library.city,
 
-        distance: Number(libraries.raw[index].distance).toFixed(2) + ' KM',
+        distance:
+          Number(libraries.raw[index].distance).toFixed(2) + ' KM',
       })),
     };
   }

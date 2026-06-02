@@ -21,21 +21,9 @@ import { VerifyPaymentDto } from './dto/verify-payment.dto';
 export class BookingsController {
   constructor(private readonly bookingsService: BookingsService) {}
 
-  @Post('create-order')
-  createOrder(
-    @Body()
-    createBookingDto: CreateBookingDto,
-  ) {
-    return this.bookingsService.createOrder(createBookingDto);
-  }
+  
 
-  @Post('verify-payment')
-  verifyPayment(
-    @Body()
-    verifyPaymentDto: VerifyPaymentDto,
-  ) {
-    return this.bookingsService.verifyPayment(verifyPaymentDto);
-  }
+ 
 
   @Post('manual')
   createManualBooking(
@@ -51,14 +39,6 @@ export class BookingsController {
   findAll(@Req() req: any) {
     const adminId = req.admins.id;
     return this.bookingsService.findAll(adminId);
-  }
-
-  @Get('user/:id')
-  findUserBookings(
-    @Param('id')
-    id: string,
-  ) {
-    return this.bookingsService.findUserById(id);
   }
 
   @Post('extend/:bookingId/:planId')

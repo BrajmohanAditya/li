@@ -39,21 +39,7 @@ export class LibraryPriceService {
     };
   }
 
-  async findAll(adminId: string) {
-    const data = await this.libraryPriceRepository.find({
-      where: {
-        library: {
-          admin: { id: adminId },
-        },
-      },
-      relations: ['library'],
-    });
-
-    return {
-      message: 'Library prices retrieved successfully',
-      data,
-    };
-  }
+ 
 
   async findByLibraryId(id: string, adminId: string) {
     const library = await this.libraryRepository.findOne({

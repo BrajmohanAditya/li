@@ -32,24 +32,24 @@ export class UsersService {
 
     const data = await this.userRepository.save(user);
 
-    
+
 
     const { password, ...result } = data;
 
     return {
       message: "User created successfully",
-      
+
       data: result
     };
 
 
   }
 
-  async findAll (){
+  async findAll() {
     const users = await this.userRepository.find();
 
     return {
-      message :"Get all Users",
+      message: "Get all Users",
       data: users
     }
   }
@@ -70,18 +70,15 @@ export class UsersService {
 
   }
 
-
   async remove(id: string) {
-    const user = await this.userRepository.findOne({ where: { id } });
-
+    const user = this.userRepository.findOne({ where: { id } });
     if (!user) {
       throw new BadRequestException("User not found");
     }
-
-    await this.userRepository.delete(id);
-
+    const data = await this.userRepository.delete(id);
     return {
-      message: "User deleted successfully",
+      message: "User removed successfully",
+      data
     };
   }
 }

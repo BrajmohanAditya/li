@@ -23,10 +23,13 @@ export class Library {
 
   @ManyToOne(() => Admin, (admin) => admin.libraries, {
     onDelete: 'CASCADE',
-    nullable: true, // IMPORTANT
+    nullable: true,
   })
   @JoinColumn({ name: 'adminId' })
   admin!: Admin;
+
+  @Column({type: 'uuid' ,nullable: true})
+  adminId?: string;
 
   @Column({ nullable: true })
   name!: string;
@@ -89,14 +92,22 @@ export class Library {
   })
   sheets!: Sheet[];
 
-  @OneToMany(() => LibraryPrice, (pricing) => pricing.library, {
-    cascade: true,
-  })
+  @OneToMany(
+    () => LibraryPrice,
+    (pricing) => pricing.library,
+    {
+      cascade: true,
+    },
+  )
   pricingPlans!: LibraryPrice[];
 
-  @OneToMany(() => LibraryFeature, (feature) => feature.library, {
-    cascade: true,
-  })
+  @OneToMany(
+    () => LibraryFeature,
+    (feature) => feature.library,
+    {
+      cascade: true,
+    },
+  )
   features!: LibraryFeature[];
 
   @OneToMany(() => User, (user) => user.library)

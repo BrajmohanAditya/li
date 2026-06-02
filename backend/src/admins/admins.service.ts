@@ -14,7 +14,7 @@ export class AdminsService {
     @InjectRepository(Admin)
     private readonly adminRepository: Repository<Admin>,
     private readonly s3service: S3Service,
-  ) {}
+  ) { }
   async signup(createAdminDto: CreateAdminDto) {
     const existingAdmin = await this.adminRepository.findOne({
       where: { email: createAdminDto.email },
@@ -89,10 +89,13 @@ export class AdminsService {
   }
 
   async update(
-    id: string,
+    req: any,
     updateAdminDto: UpdateAdminDto,
     file: Express.Multer.File,
   ) {
+
+    const id = req.admins.id;
+
     const isMatch = await this.adminRepository.findOne({
       where: { id },
     });
@@ -113,19 +116,5 @@ export class AdminsService {
     return udpatedata;
   }
 
-  async remove(id: string) {
-    const admin = await this.adminRepository.findOne({
-      where: { id },
-    });
 
-    if (!admin) {
-      throw new BadRequestException('admin not exist');
-    }
-
-    await this.adminRepository.delete(id);
-
-    return {
-      message: 'sucessfully delete admin',
-    };
-  }
 }

@@ -26,8 +26,17 @@ export class LibraryPrice {
   @Column()
   durationValue!: number; 
 
-  @Column()
+  @Column({type: 'uuid'})
   libraryId!: string;
+
+  @Column({ nullable: true })
+  slotType!: string;
+
+  @Column({ nullable: true })
+  startTime!: string;
+
+  @Column({ nullable: true })
+  endTime!: string;
 
 
   @Column({

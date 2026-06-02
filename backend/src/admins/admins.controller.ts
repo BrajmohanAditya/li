@@ -35,22 +35,17 @@ export class AdminsController {
     return this.adminsService.profile(req);
   }
 
-  @Patch(':id')
+  @Patch('update')
   @UseInterceptors(FileInterceptor('image'))
   update(
-    @Param('id')
-    id: string,
+   @Req() req:any,
 
-    @Body()
     updateAdminDto: UpdateAdminDto,
 
     @UploadedFile()
     file: Express.Multer.File,
   ) {
-    return this.adminsService.update(id, updateAdminDto, file);
+    return this.adminsService.update(req, updateAdminDto, file);
   }
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.adminsService.remove(id);
-  }
+ 
 }

@@ -12,12 +12,17 @@ export class AuthMiddleware implements NestMiddleware {
     }
 
     try {
-      const veryfiyToken = jwt.verify(token, process.env.JWT_SECRET_KEY as string);
+      const veryfiyToken = await jwt.verify(token, process.env.JWT_SECRET_KEY as string);
+
+      if (!veryfiyToken) {
+        throw new BadRequestException('Invalid token');
+      }
+
       req.admins = veryfiyToken;
+
+      next();
     } catch (error) {
       throw new BadRequestException('Invalid or expired token');
     }
-
-    next();
   }
 }

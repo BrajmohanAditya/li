@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Plus, Search, LayoutGrid, List, Loader2, ChevronDown, CheckCircle2, Layers } from 'lucide-react';
 import { getAllLibrariesHook } from '../../hooks/library.hook';
-import { getAllSheetsHook, createSheetHook } from '../../hooks/seat.create.hook';
+import { getAllSheetsHook, createSheetHook, deleteSheetHook, updateSheetHook } from '../../hooks/seat.create.hook';
 import CreateSheetModal from '../../components/CreateSheetModal';
+import EditSheetModal from '../../components/EditSheetModal';
 
 const CreateSeatPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -10,8 +11,12 @@ const CreateSeatPage = () => {
   const [selectedLibrary, setSelectedLibrary] = useState('');
   const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingSheet, setEditingSheet] = useState(null);
 
   const { mutate: createSheet, isPending: isCreating } = createSheetHook();
+  const { mutate: deleteSheet } = deleteSheetHook();
+  const { mutate: updateSheet, isPending: isUpdating } = updateSheetHook();
   const { data: sheetsData, isLoading: isLoadingSheets } = getAllSheetsHook();
   const allSheets = sheetsData?.sheets || [];
 
@@ -20,6 +25,15 @@ const CreateSeatPage = () => {
       onSuccess: () => {
         setIsModalOpen(false);
         resetForm();
+      }
+    });
+  };
+
+  const handleEditSubmit = (payload) => {
+    updateSheet(payload, {
+      onSuccess: () => {
+        setIsEditModalOpen(false);
+        setEditingSheet(null);
       }
     });
   };
@@ -167,15 +181,47 @@ const CreateSeatPage = () => {
           ) : filteredSheets.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-4">
               {filteredSheets.map(sheet => (
-                <div key={sheet.id} className="bg-white p-4 border-2 border-emerald-300 rounded-2xl flex flex-col items-center justify-center relative shadow-sm hover:shadow-md transition-shadow">
-                  <div className="absolute top-2 right-2 text-emerald-500">
+                <div key={sheet.id} className="group bg-white hover:bg-slate-500 p-4 border-2 border-emerald-300 rounded-2xl flex flex-col items-center justify-center relative shadow-sm transition-colors overflow-hidden cursor-pointer">
+                  {/* Status Icon */}
+                  <div className="absolute top-2 right-2 text-emerald-500 group-hover:text-slate-700 transition-colors">
                     <CheckCircle2 className="w-4 h-4" />
                   </div>
-                  <div className="w-12 h-12 bg-emerald-500 rounded-xl flex items-center justify-center mb-3 text-white shadow-sm">
+                  
+                  {/* Main Icon */}
+                  <div className="w-12 h-12 bg-emerald-500 group-hover:bg-emerald-800 rounded-xl flex items-center justify-center mb-3 text-white shadow-sm transition-colors">
                     <Layers className="w-6 h-6" />
                   </div>
-                  <h3 className="font-bold text-slate-800 text-lg">{sheet.sheetNumber}</h3>
-                  <p className="text-xs font-semibold text-emerald-500 mt-0.5">Free</p>
+                  
+                  {/* Sheet Number */}
+                  <h3 className="font-bold text-slate-800 group-hover:text-slate-900 text-lg transition-colors">{sheet.sheetNumber}</h3>
+                  
+                  {/* Availability */}
+                  <p className="text-xs font-semibold text-emerald-500 group-hover:text-emerald-800 mt-0.5 transition-colors">Free</p>
+
+                  {/* Hover Buttons */}
+                  <div className="absolute inset-0 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10 bg-black/10">
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setEditingSheet(sheet);
+                        setIsEditModalOpen(true);
+                      }}
+                      className="bg-white text-indigo-600 font-medium text-xs px-3 py-1.5 rounded shadow-sm hover:bg-indigo-50 transition-colors"
+                    >
+                      Edit
+                    </button>
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (window.confirm(`Are you sure you want to delete sheet ${sheet.sheetNumber}?`)) {
+                          deleteSheet(sheet.id);
+                        }
+                      }}
+                      className="bg-white text-red-500 font-medium text-xs px-3 py-1.5 rounded shadow-sm hover:bg-red-50 transition-colors"
+                    >
+                      Del
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -192,6 +238,14 @@ const CreateSeatPage = () => {
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleCreateSubmit}
         isPending={isCreating}
+      />
+
+      <EditSheetModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        onSubmit={handleEditSubmit}
+        isPending={isUpdating}
+        sheet={editingSheet}
       />
     </div>
   );

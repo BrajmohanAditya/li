@@ -13,13 +13,8 @@ export class LibraryPriceController {
      return this.libraryPriceService.create(createLibraryPriceDto, adminId);
   }
 
-  @Get()
-  findAll(@Req() req: any) {
-    const adminId = req.admins.id;
-    return this.libraryPriceService.findAll(adminId);
-  }
 
-  @Get(':id')
+  @Get('/library/:id')
   findOne(@Req() req: any, @Param('id') id: string) {
     const adminId = req.admins.id;
     return this.libraryPriceService.findByLibraryId(id, adminId);

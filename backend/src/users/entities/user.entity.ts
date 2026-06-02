@@ -1,5 +1,5 @@
 import { Library } from "src/librarys/entities/library.entity";
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity('users')
 export class User {
@@ -30,8 +30,14 @@ export class User {
 
     @Column()
     gender!: string;
-    @ManyToOne(() => Library, (library) => library.users)
+
+    @Column({ nullable: true })
+    libraryId!: string;
+
+    @ManyToOne(() => Library)
+    @JoinColumn({ name: 'libraryId' })
     library!: Library;
+
 
     @Column({ nullable: true })
     imageUrl!: string;
