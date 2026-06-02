@@ -15,35 +15,32 @@ export class LibrarysService {
     private readonly s3Service: S3Service,
   ) {}
 
- async create(
-  createLibraryDto: CreateLibraryDto,
-  files: Express.Multer.File[],
-  adminId: string,
-) {
+  async create(
+    createLibraryDto: CreateLibraryDto,
+    files: Express.Multer.File[],
+    adminId: string,
+  ) {
+    let imageUrls: string[] = [];
 
-  let imageUrls: string[] = [];
+    if (files && files.length > 0) {
+      imageUrls = await Promise.all(
+        files.map((file) => this.s3Service.uploadFile(file, 'libraries')),
+      );
+    }
 
-  if (files && files.length > 0) {
-    imageUrls = await Promise.all(
-      files.map((file) =>
-        this.s3Service.uploadFile(file, 'libraries'),
-      ),
-    );
+    const library = this.libraryRepository.create({
+      ...createLibraryDto,
+      images: imageUrls,
+      admin: { id: adminId },
+    });
+
+    const data = await this.libraryRepository.save(library);
+
+    return {
+      message: 'Library created successfully',
+      data,
+    };
   }
-
-  const library = this.libraryRepository.create({
-    ...createLibraryDto,
-    images: imageUrls,
-    admin: { id: adminId }  ,
-  });
-
-  const data = await this.libraryRepository.save(library);
-
-  return {
-    message: 'Library created successfully',
-    data,
-  };
-}
 
   async findAll(adminId: string) {
     const data = await this.libraryRepository.find({
@@ -75,7 +72,11 @@ export class LibrarysService {
     };
   }
 
-  async update(id: string, updateLibraryDto: UpdateLibraryDto, adminId: string) {
+  async update(
+    id: string,
+    updateLibraryDto: UpdateLibraryDto,
+    adminId: string,
+  ) {
     const library = await this.libraryRepository.findOne({
       where: { id, admin: { id: adminId } },
     });
@@ -116,12 +117,12 @@ export class LibrarysService {
     };
   }
 
- async findNearestLibraries(
-  latitude: number,
-  longitude: number,
-  radius: number = 5,
-) {
-  const query = `
+  async findNearestLibraries(
+    latitude: number,
+    longitude: number,
+    radius: number = 5,
+  ) {
+    const query = `
     (
       6371 *
       acos(
@@ -134,31 +135,30 @@ export class LibrarysService {
     )
   `;
 
-  const libraries = await this.libraryRepository
-    .createQueryBuilder('library')
-    .addSelect(query, 'distance')
-    .where(`${query} <= :radius`)
-    .setParameters({
-      latitude,
-      longitude,
-      radius,
-    })
-    .orderBy('distance', 'ASC')
-    .getRawAndEntities();
+    const libraries = await this.libraryRepository
+      .createQueryBuilder('library')
+      .addSelect(query, 'distance')
+      .where(`${query} <= :radius`)
+      .setParameters({
+        latitude,
+        longitude,
+        radius,
+      })
+      .orderBy('distance', 'ASC')
+      .getRawAndEntities();
 
-  return {
-    message: `Libraries within ${radius} KM fetched successfully`,
-    totalLibraries: libraries.entities.length,
+    return {
+      message: `Libraries within ${radius} KM fetched successfully`,
+      totalLibraries: libraries.entities.length,
 
-    data: libraries.entities.map((library, index) => ({
-      id: library.id,
-      name: library.name,
-      address: library.address,
-      city: library.city,
+      data: libraries.entities.map((library, index) => ({
+        id: library.id,
+        name: library.name,
+        address: library.address,
+        city: library.city,
 
-      distance:
-        Number(libraries.raw[index].distance).toFixed(2) + ' KM',
-    })),
-  };
-}
+        distance: Number(libraries.raw[index].distance).toFixed(2) + ' KM',
+      })),
+    };
+  }
 }
