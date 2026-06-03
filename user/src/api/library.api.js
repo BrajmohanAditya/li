@@ -36,7 +36,7 @@ export const createLibraryApi = async (payload) => {
 
 export const getAllLibrariesApi = async () => {
     const token = localStorage.getItem("token");
-    const res = await axios.get(`${baseUrl}/librarys`, {
+    const res = await axios.get(`${baseUrl}/librarys/details`, {
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`

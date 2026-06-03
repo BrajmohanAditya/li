@@ -8,6 +8,7 @@ import ManageLibrary from "../pages/user/manage.library.jsx";
 import ManageStudent from "../pages/user/add.student.jsx";
 import CreateSeatPage from "../pages/user/create.seat.page.jsx";
 import SeatManagement from "../pages/user/seat.management.jsx";
+import Plan from "../pages/user/plan.jsx";
 
 const MainRoutes = () => {
   return (
@@ -20,6 +21,7 @@ const MainRoutes = () => {
           <Route path="/students" element={<ManageStudent />} />
           <Route path="/bookings" element={<SeatManagement />} />
           <Route path="/sheets" element={<CreateSeatPage />} />
+          <Route path="/plans" element={<Plan />} />
         </Route>
       </Route>
 
