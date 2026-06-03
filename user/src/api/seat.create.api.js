@@ -39,7 +39,7 @@ export const getSheetByIdApi = async (id) => {
 
 export const updateSheetApi = async ({ id, data }) => {
     const token = localStorage.getItem("token");
-    const res = await axios.patch(`${baseUrl}/sheets/${id}`, data, {
+    const res = await axios.put(`${baseUrl}/sheets/${id}`, data, {
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`
