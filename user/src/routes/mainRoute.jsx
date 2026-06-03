@@ -9,6 +9,7 @@ import ManageStudent from "../pages/user/add.student.jsx";
 import CreateSeatPage from "../pages/user/create.seat.page.jsx";
 import SeatManagement from "../pages/user/seat.management.jsx";
 import Plan from "../pages/user/plan.jsx";
+import FeaturesManagement from "../pages/user/features.jsx";
 
 const MainRoutes = () => {
   return (
@@ -22,6 +23,7 @@ const MainRoutes = () => {
           <Route path="/bookings" element={<SeatManagement />} />
           <Route path="/sheets" element={<CreateSeatPage />} />
           <Route path="/plans" element={<Plan />} />
+          <Route path="/features" element={<FeaturesManagement />} />
         </Route>
       </Route>
 

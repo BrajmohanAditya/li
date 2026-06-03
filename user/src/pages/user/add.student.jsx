@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Users, Plus, Search, MapPin, Phone, Trash2, Loader2, CheckCircle2 } from 'lucide-react';
 import AddStudentModal from '../../components/AddStudentModal';
-import { addStudentHook, getAllStudentsHook, deleteStudentHook } from '../../hooks/add.student.hook';
+import { addStudentHook, getAllStudentsHook, deleteStudentHook } from '../../hooks/add.student.hook.js';
 
 const ManageStudent = () => {
   const [searchTerm, setSearchTerm] = useState('');

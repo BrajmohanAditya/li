@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Calendar, CheckCircle, CreditCard, BookOpen, Book, ChevronDown, Loader2 } from 'lucide-react';
 import { getAllLibrariesHook } from '../../hooks/library.hook';
-import { getAllStudentsHook } from '../../hooks/add.student.hook';
+import { getAllStudentsHook } from '../../hooks/add.student.hook.js';
 import { getSheetByIdHook } from '../../hooks/seat.create.hook';
 import { createBookingHook } from '../../hooks/book.seat.hook';
 import { useQuery } from '@tanstack/react-query';
