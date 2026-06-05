@@ -3,7 +3,7 @@ import { BookOpen, Plus, Search, Filter, ChevronDown, Eye, Pencil, Trash2, Phone
 import CreateLibraryModal from '../../components/CreateLibraryModal';
 import ViewLibraryModal from '../../components/ViewLibraryModal';
 import EditLibraryModal from '../../components/EditLibraryModal';
-import { createLibraryHook, getAllLibrariesHook, updateLibraryHook, deleteLibraryHook } from '../../hooks/library.hook';
+import { createLibraryHook, getAllLibrariesHook, getAllLibrariesInDetailsHook, updateLibraryHook, deleteLibraryHook } from '../../hooks/library.hook';
 
 const ManageLibrary = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -15,11 +15,13 @@ const ManageLibrary = () => {
   const [editLibrary, setEditLibrary] = useState(null);
 
   const { mutate: createLibrary, isPending: isCreating } = createLibraryHook();
-  const { data: librariesData, isLoading, isError } = getAllLibrariesHook();
   const { mutate: updateLibrary, isPending: isUpdating } = updateLibraryHook();
   const { mutate: deleteLibrary, isPending: isDeleting } = deleteLibraryHook();
+  const { data: librariesInDetailsData, isLoading: isLoadingInDetails, isError: isErrorInDetails } = getAllLibrariesInDetailsHook();
 
-  const libraries = librariesData?.data || [];
+  const libraries = librariesInDetailsData?.data?.data || librariesInDetailsData?.data || [];
+  const isLoading = isLoadingInDetails;
+  const isError = isErrorInDetails;
 
   // Filter libraries based on search term
   const filteredLibraries = libraries.filter((lib) => {

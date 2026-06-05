@@ -47,6 +47,18 @@ export const getAllLibrariesApi = async () => {
     return res.data;
 };
 
+export const getAllLibrariesApiInDetails = async () => {
+    const token = localStorage.getItem("token");
+    const res = await axios.get(`${baseUrl}/librarys`, {
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        withCredentials: true,
+    });
+    return res.data;
+};
+
 export const updateLibraryApi = async ({ id, data }) => {
     const token = localStorage.getItem("token");
     const res = await axios.patch(`${baseUrl}/librarys/${id}`, data, {

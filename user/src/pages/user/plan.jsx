@@ -17,10 +17,11 @@ const SubscriptionPlans = () => {
   const plans = Array.isArray(plansData) ? plansData : (Array.isArray(plansData?.data) ? plansData.data : []);
   const { mutate: deletePlan } = deletePlanHook();
 
-  const filteredPlans = plans.filter(plan => 
-    plan.planName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    plan.libraryId?.name?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredPlans = plans.filter(plan => {
+    const libraryName = libraries.find(lib => lib.id === plan.libraryId)?.name || '';
+    return plan.planName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+           libraryName.toLowerCase().includes(searchQuery.toLowerCase());
+  });
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
@@ -164,7 +165,9 @@ const SubscriptionPlans = () => {
                   <tr key={plan.id} className="border-b border-gray-100 hover:bg-slate-50 transition-colors">
                     <td className="px-6 py-4 text-sm text-slate-600">{index + 1}</td>
                     <td className="px-6 py-4 text-sm font-medium text-slate-800">{plan.planName}</td>
-                    <td className="px-6 py-4 text-sm text-slate-600">{plan.libraryId?.name || '-'}</td>
+                    <td className="px-6 py-4 text-sm text-slate-600">
+                      {libraries.find(lib => lib.id === plan.libraryId)?.name || '-'}
+                    </td>
                     <td className="px-6 py-4 text-sm text-slate-600 capitalize">{plan.type?.toLowerCase()}</td>
                     <td className="px-6 py-4 text-sm text-slate-600">{plan.slotType || '-'}</td>
                     <td className="px-6 py-4 text-sm text-slate-600">

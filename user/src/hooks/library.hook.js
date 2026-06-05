@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createLibraryApi, getAllLibrariesApi, updateLibraryApi, deleteLibraryApi } from "../api/library.api";
+import { createLibraryApi, getAllLibrariesApi, getAllLibrariesApiInDetails, updateLibraryApi, deleteLibraryApi } from "../api/library.api";
 import { toast } from "sonner";
 
 export const createLibraryHook = () => {
@@ -29,6 +29,16 @@ export const getAllLibrariesHook = () => {
   return useQuery({
     queryKey: ["get-libraries"],
     queryFn: getAllLibrariesApi,
+    enabled: !!token,
+  });
+};
+
+export const getAllLibrariesInDetailsHook = (page = 1, limit = 10) => {
+  const token = localStorage.getItem("token");
+
+  return useQuery({
+    queryKey: ["get-libraries-details", page, limit],
+    queryFn: () => getAllLibrariesApiInDetails(page, limit),
     enabled: !!token,
   });
 };
