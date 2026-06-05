@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Search, LayoutGrid, List, Loader2, ChevronDown, CheckCircle2, Layers } from 'lucide-react';
+import { Plus, Search, LayoutGrid, List, Loader2, ChevronDown, CheckCircle2, Layers, XCircle } from 'lucide-react';
 import { getAllLibrariesHook } from '../../hooks/library.hook';
 import { getSheetByIdHook, createSheetHook, deleteSheetHook, updateSheetHook } from '../../hooks/seat.create.hook';
 import CreateSheetModal from '../../components/CreateSheetModal';
@@ -180,14 +180,14 @@ const CreateSeatPage = () => {
           ) : filteredSheets.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-4">
               {filteredSheets.map(sheet => (
-                <div key={sheet.id} className="group bg-white hover:bg-slate-500 p-4 border-2 border-emerald-300 rounded-2xl flex flex-col items-center justify-center relative shadow-sm transition-colors overflow-hidden cursor-pointer">
+                <div key={sheet.id} className={`group bg-white hover:bg-slate-500 p-4 border-2 ${sheet.isAvailable ? 'border-emerald-300' : 'border-red-300'} rounded-2xl flex flex-col items-center justify-center relative shadow-sm transition-colors overflow-hidden cursor-pointer`}>
                   {/* Status Icon */}
-                  <div className="absolute top-2 right-2 text-emerald-500 group-hover:text-slate-700 transition-colors">
-                    <CheckCircle2 className="w-4 h-4" />
+                  <div className={`absolute top-2 right-2 ${sheet.isAvailable ? 'text-emerald-500' : 'text-red-500'} group-hover:text-slate-700 transition-colors`}>
+                    {sheet.isAvailable ? <CheckCircle2 className="w-4 h-4" /> : <XCircle className="w-4 h-4" />}
                   </div>
                   
                   {/* Main Icon */}
-                  <div className="w-12 h-12 bg-emerald-500 group-hover:bg-emerald-800 rounded-xl flex items-center justify-center mb-3 text-white shadow-sm transition-colors">
+                  <div className={`w-12 h-12 ${sheet.isAvailable ? 'bg-emerald-500 group-hover:bg-emerald-800' : 'bg-red-500 group-hover:bg-red-800'} rounded-xl flex items-center justify-center mb-3 text-white shadow-sm transition-colors`}>
                     <Layers className="w-6 h-6" />
                   </div>
                   
@@ -195,7 +195,9 @@ const CreateSeatPage = () => {
                   <h3 className="font-bold text-slate-800 group-hover:text-slate-900 text-lg transition-colors">{sheet.sheetNumber}</h3>
                   
                   {/* Availability */}
-                  <p className="text-xs font-semibold text-emerald-500 group-hover:text-emerald-800 mt-0.5 transition-colors">Free</p>
+                  <p className={`text-xs font-semibold ${sheet.isAvailable ? 'text-emerald-500 group-hover:text-emerald-800' : 'text-red-500 group-hover:text-red-800'} mt-0.5 transition-colors`}>
+                    {sheet.isAvailable ? 'Free' : 'Booked'}
+                  </p>
 
                   {/* Hover Buttons */}
                   <div className="absolute inset-0 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10 bg-black/10">
