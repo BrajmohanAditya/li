@@ -15,7 +15,7 @@ export const createPlanApi = async (payload) => {
 
 export const deletePlanApi = async (id) => {
     const token = localStorage.getItem("token");
-    const res = await axios.delete(`${baseUrl}/librarys/details/${id}`, {
+    const res = await axios.delete(`${baseUrl}/library-price/${id}`, {
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`

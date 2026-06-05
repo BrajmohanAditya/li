@@ -44,13 +44,11 @@ export class LibrarysService {
     return await this.libraryRepo.save(library);
   }
 
-  // =========================
-  // GET ALL (ONLY LOGGED ADMIN)
-  // =========================
+  
   async findAll(adminId: string, page: number = 1, limit: number = 10) {
     const [librarys, total] = await this.libraryRepo.findAndCount({
       where: {
-        adminId, // ✅ restrict data per admin
+        adminId,
       },
       skip: (page - 1) * limit,
       take: limit,
@@ -68,9 +66,7 @@ export class LibrarysService {
     };
   }
 
-  // =========================
-  // SHORT DATA (ADMIN FILTER)
-  // =========================
+ 
   async findAllShortData(adminId: string) {
     const librarys = await this.libraryRepo.find({
       where: { adminId },
@@ -87,9 +83,7 @@ export class LibrarysService {
     };
   }
 
-  // =========================
-  // GET ONE (SECURE)
-  // =========================
+ 
   async findOne(id: string, adminId: string) {
     return await this.libraryRepo.findOne({
       where: {
@@ -99,9 +93,7 @@ export class LibrarysService {
     });
   }
 
-  // =========================
-  // ASSIGN LIBRARY TO ADMIN
-  // =========================
+ 
   async assignLibraryToAdmin(libraryId: string, adminId: string) {
     const library = await this.libraryRepo.findOne({
       where: { id: libraryId },
@@ -116,9 +108,7 @@ export class LibrarysService {
     return await this.libraryRepo.save(library);
   }
 
-  // =========================
-  // UPDATE (SECURE)
-  // =========================
+ 
   async update(
     id: string,
     adminId: string,
@@ -140,9 +130,7 @@ export class LibrarysService {
     return await this.findOne(id, adminId);
   }
 
-  // =========================
-  // DELETE (SECURE)
-  // =========================
+ 
   async remove(id: string, adminId: string) {
     const library = await this.libraryRepo.findOne({
       where: {

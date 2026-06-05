@@ -8,16 +8,17 @@ export const createLibraryApi = async (payload) => {
     // we MUST send data as FormData instead of standard JSON.
     const formData = new FormData();
     
+    // Append files
+    const files = payload.image || payload.images;
+    if (files && files.length > 0) {
+        for (let i = 0; i < files.length; i++) {
+            formData.append("images", files[i]);
+        }
+    }
+    
+    // Append other fields
     Object.keys(payload).forEach(key => {
-        if (key === 'image') {
-            // Append all selected images (Array of File objects)
-            if (payload.image && payload.image.length > 0) {
-                for (let i = 0; i < payload.image.length; i++) {
-                    formData.append("image", payload.image[i]);
-                }
-            }
-        } else {
-            // Append other text fields
+        if (key !== 'image' && key !== 'images') {
             formData.append(key, payload[key]);
         }
     });

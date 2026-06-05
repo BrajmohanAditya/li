@@ -22,6 +22,11 @@ export class LibraryPriceController {
     return this.libraryPriceService.findOne(id);
   }
 
+  @Get('library/:libraryId')
+  findByLibraryId(@Param('libraryId', ParseUUIDPipe) libraryId: string) {
+    return this.libraryPriceService.findByLibraryId(libraryId);
+  }
+
   @Put(':id')
   update(@Param('id', ParseUUIDPipe) id: string, @Body() updateLibraryPriceDto: UpdateLibraryPriceDto) {
     return this.libraryPriceService.update(id, updateLibraryPriceDto);

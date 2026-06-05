@@ -1,9 +1,19 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID, Min } from 'class-validator';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+  Min,
+} from 'class-validator';
+import { Type } from 'class-transformer';
 
 export enum PlanType {
   HOURS = 'HOURS',
   DAYS = 'DAYS',
   MONTH = 'MONTH',
+  YEARS = 'YEARS',
 }
 
 export class CreateLibraryPriceDto {
@@ -15,12 +25,14 @@ export class CreateLibraryPriceDto {
   @IsNotEmpty()
   planName!: string;
 
-  @IsString()
-  @IsOptional()
-  duration?: string;
+  @IsNumber()
+  @Min(0)
+  @Type(() => Number)
+  durationValue!: number;
 
   @IsNumber()
   @Min(0)
+  @Type(() => Number)
   price!: number;
 
   @IsString()
@@ -30,6 +42,7 @@ export class CreateLibraryPriceDto {
   @IsString()
   @IsOptional()
   startTime?: string;
+
   @IsString()
   @IsOptional()
   endTime?: string;
@@ -37,8 +50,4 @@ export class CreateLibraryPriceDto {
   @IsEnum(PlanType)
   @IsNotEmpty()
   type!: PlanType;
-
-  @IsNumber()
-  @Min(0)
-  durationValue!: number;
 }

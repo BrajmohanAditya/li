@@ -1,11 +1,9 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateSheetDto } from './create-sheet.dto';
-import { IsBoolean, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 
-export class UpdateSheetDto extends PartialType(CreateSheetDto) {
+export class UpdateSheetDto {
   @IsOptional()
   @IsString()
-  sheetNumber?: string;
+  sheetNumber?: number;
 
   @IsOptional()
   @IsBoolean()

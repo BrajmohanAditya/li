@@ -166,7 +166,7 @@ const SubscriptionPlans = () => {
                     <td className="px-6 py-4 text-sm font-medium text-slate-800">{plan.planName}</td>
                     <td className="px-6 py-4 text-sm text-slate-600">{plan.libraryId?.name || '-'}</td>
                     <td className="px-6 py-4 text-sm text-slate-600 capitalize">{plan.type?.toLowerCase()}</td>
-                    <td className="px-6 py-4 text-sm text-slate-600">{plan.timeSlot || '-'}</td>
+                    <td className="px-6 py-4 text-sm text-slate-600">{plan.slotType || '-'}</td>
                     <td className="px-6 py-4 text-sm text-slate-600">
                       {plan.startTime} - {plan.endTime}
                     </td>

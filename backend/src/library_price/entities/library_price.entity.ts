@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 
-export type PlanType = 'HOURS' | 'DAYS' | 'MONTH';
+export type PlanType = 'HOURS' | 'DAYS' | 'MONTH' | 'YEARS';
 
 @Entity('library_prices')
 export class LibraryPrice {
@@ -15,18 +15,18 @@ export class LibraryPrice {
   id!: string;
 
   @Column()
-  planName!: string; 
+  planName!: string;
 
   @Column({
     type: 'enum',
-    enum: ['HOURS', 'DAYS', 'MONTH'],
+    enum: ['HOURS', 'DAYS', 'MONTH', 'YEARS'],
   })
   type!: PlanType;
 
-  @Column()
-  durationValue!: number; 
+  @Column({ type: 'int' })
+  durationValue!: number;
 
-  @Column({type: 'uuid'})
+  @Column({ type: 'uuid' })
   libraryId!: string;
 
   @Column({ nullable: true })
@@ -37,7 +37,6 @@ export class LibraryPrice {
 
   @Column({ nullable: true })
   endTime!: string;
-
 
   @Column({
     type: 'decimal',

@@ -21,13 +21,7 @@ export class CreateBookingDto {
   @IsOptional()
   featureId?: string;
 
-  @IsDateString()
-  @IsNotEmpty()
-  startTime!: string;
-
-  @IsDateString()
-  @IsNotEmpty()
-  endTime!: string;
+  
 
   @IsEnum(['ACTIVE', 'EXPIRED', 'CANCELLED'])
   @IsOptional()

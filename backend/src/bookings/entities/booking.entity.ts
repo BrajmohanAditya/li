@@ -2,6 +2,7 @@ import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
+  CreateDateColumn,
 } from 'typeorm';
 
 @Entity('bookings')
@@ -9,25 +10,23 @@ export class Booking {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column({type: 'uuid'})
+  @Column({ type: 'uuid' })
   userId!: string;
 
-  @Column({type: 'uuid', nullable: true})
+  @Column({ type: 'uuid', nullable: true })
   libraryId!: string;
 
-  @Column({type: 'uuid'})
+  @Column({ type: 'uuid' })
   sheetId!: string;
 
-  @Column({type: 'uuid'})
+  @Column({ type: 'uuid' })
   planId!: string;
-  @Column({type: 'uuid'})
+
+  @Column({ type: 'uuid', nullable: true })
   featureId!: string;
 
   @Column({ type: 'timestamp' })
-  startTime!: Date;
-
-  @Column({ type: 'timestamp' })
-  endTime!: Date;
+  expiresAt!: Date;
 
   @Column({
     default: 'ACTIVE',
@@ -39,7 +38,6 @@ export class Booking {
 
   @Column({
     nullable: true,
-    
   })
   paymentId!: string;
 
@@ -48,8 +46,6 @@ export class Booking {
   })
   bookingType!: string;
 
-  
-
-
-
+  @CreateDateColumn()
+  createdAt!: Date;
 }

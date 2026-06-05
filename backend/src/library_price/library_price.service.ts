@@ -10,7 +10,7 @@ export class LibraryPriceService {
   constructor(
     @InjectRepository(LibraryPrice)
     private readonly libraryPriceRepo: Repository<LibraryPrice>,
-  ) { }
+  ) {}
 
   async create(createLibraryPriceDto: CreateLibraryPriceDto) {
     const libraryPrice = this.libraryPriceRepo.create(createLibraryPriceDto);
@@ -21,13 +21,30 @@ export class LibraryPriceService {
     return await this.libraryPriceRepo.find();
   }
 
+  async findByLibraryId(id: string) {
+    const price = await this.libraryPriceRepo.find({
+      where: { libraryId: id },
+    });
+
+    if (!price.length) {
+      throw new NotFoundException(`No pricing found for library ${id}`);
+    }
+
+    return {
+      message: 'Prices fetched successfully by libraryId',
+      data: price,
+    };
+  }
+
   async findOne(id: string) {
     const libraryPrice = await this.libraryPriceRepo.findOne({
       where: { id },
     });
 
     if (!libraryPrice) {
-      throw new NotFoundException(`Library Price with ID ${id} not found`);
+      throw new NotFoundException(
+        `Library Price with ID ${id} not found`,
+      );
     }
 
     return libraryPrice;
@@ -44,7 +61,7 @@ export class LibraryPriceService {
   async remove(id: string) {
     const libraryPrice = await this.findOne(id);
 
-    await this.libraryPriceRepo.remove(libraryPrice);
+    await this.libraryPriceRepo.delete(id);
 
     return {
       message: 'Library price deleted successfully',

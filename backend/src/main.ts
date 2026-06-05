@@ -3,9 +3,15 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common/pipes/validation.pipe';
 import { DocumentBuilder } from 'node_modules/@nestjs/swagger/dist/document-builder';
 import { SwaggerModule } from 'node_modules/@nestjs/swagger/dist/swagger-module';
+import helmet from 'helmet';
+import compression from 'compression';
+
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+   app.use(helmet());
+   app.use(compression());
 
    app.useGlobalPipes(new ValidationPipe({
     whitelist: true,

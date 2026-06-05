@@ -21,8 +21,8 @@ const CreatePlanModal = ({ isOpen, onClose }) => {
       libraryId: data.libraryId,
       planName: data.name,
       type: data.planType || "MONTH",
-      duration: data.duration ? data.duration.toString() : "1",
       durationValue: data.duration || 1,
+      slotType: data.timeSlot,
       startTime: data.startTime,
       endTime: data.endTime,
       price: data.price
