@@ -42,8 +42,8 @@ const EditSheetModal = ({ isOpen, onClose, onSubmit, isPending, sheet }) => {
 
           <form onSubmit={handleSubmit} className="px-6 pb-6">
             {/* Sheet Info Block */}
-            <div className="bg-indigo-50/50 rounded-2xl p-6 flex flex-col items-center justify-center mb-6">
-              <div className="w-14 h-14 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center mb-3 shadow-md">
+            <div className="bg-brand-50/50 rounded-2xl p-6 flex flex-col items-center justify-center mb-6">
+              <div className="w-14 h-14 bg-gradient-to-br from-brand-500 to-purple-500 rounded-2xl flex items-center justify-center mb-3 shadow-md">
                 <Layers className="w-7 h-7 text-white" />
               </div>
               <h3 className="text-2xl font-bold text-slate-800">{sheet.sheetNumber}</h3>
@@ -79,7 +79,7 @@ const EditSheetModal = ({ isOpen, onClose, onSubmit, isPending, sheet }) => {
                   required
                   value={formData.sheetNumber}
                   onChange={(e) => setFormData({ ...formData, sheetNumber: e.target.value })}
-                  className="w-full bg-white border border-gray-200 text-slate-700 text-sm rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-sm"
+                  className="w-full bg-white border border-gray-200 text-slate-700 text-sm rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all shadow-sm"
                 />
               </div>
             </div>
@@ -96,7 +96,7 @@ const EditSheetModal = ({ isOpen, onClose, onSubmit, isPending, sheet }) => {
               <button
                 type="submit"
                 disabled={isPending || (formData.sheetNumber === sheet.sheetNumber && formData.isAvailable === sheet.isAvailable)}
-                className="flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl font-medium transition-all shadow-sm disabled:opacity-70 disabled:cursor-not-allowed"
+                className="flex items-center justify-center bg-gradient-to-r from-brand-500 to-accent-500 hover:from-brand-600 hover:to-accent-600 shadow-[0_4px_14px_0_rgba(244,63,94,0.39)] hover:shadow-[0_6px_20px_rgba(244,63,94,0.23)] hover:-translate-y-0.5 text-white px-6 py-2.5 rounded-xl font-medium transition-all shadow-sm disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {isPending ? (
                   <>

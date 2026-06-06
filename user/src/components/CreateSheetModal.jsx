@@ -57,7 +57,7 @@ const CreateSheetModal = ({ isOpen, onClose, onSubmit, isPending }) => {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="Enter collection name (e.g., Row A, Section 1)"
-                className="w-full bg-white border border-gray-200 text-slate-700 text-sm rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                className="w-full bg-white border border-gray-200 text-slate-700 text-sm rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
               />
             </div>
 
@@ -74,7 +74,7 @@ const CreateSheetModal = ({ isOpen, onClose, onSubmit, isPending }) => {
                 value={formData.sheetCount}
                 onChange={handleChange}
                 placeholder="Enter number of sheets (e.g., 5, 10, 20)"
-                className="w-full bg-white border border-gray-200 text-slate-700 text-sm rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                className="w-full bg-white border border-gray-200 text-slate-700 text-sm rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
               />
               <p className="text-xs text-gray-400 mt-2">
                 This will create individual sheets (a1, a2, a3...)
@@ -89,7 +89,7 @@ const CreateSheetModal = ({ isOpen, onClose, onSubmit, isPending }) => {
               <div className="relative">
                 {isLoadingLibraries ? (
                   <div className="w-full flex items-center justify-center py-3 bg-slate-50 border border-gray-200 rounded-xl">
-                    <Loader2 className="w-5 h-5 animate-spin text-indigo-500" />
+                    <Loader2 className="w-5 h-5 animate-spin text-brand-500" />
                   </div>
                 ) : (
                   <>
@@ -98,7 +98,7 @@ const CreateSheetModal = ({ isOpen, onClose, onSubmit, isPending }) => {
                       required
                       value={formData.libraryId}
                       onChange={handleChange}
-                      className="w-full appearance-none bg-white border border-gray-200 text-slate-700 text-sm rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 cursor-pointer transition-all"
+                      className="w-full appearance-none bg-white border border-gray-200 text-slate-700 text-sm rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 cursor-pointer transition-all"
                     >
                       <option value="" disabled>Select a library...</option>
                       {libraries.map((lib) => (
@@ -125,7 +125,7 @@ const CreateSheetModal = ({ isOpen, onClose, onSubmit, isPending }) => {
               <button
                 type="submit"
                 disabled={isPending}
-                className="flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl font-medium transition-all shadow-sm disabled:opacity-70 disabled:cursor-not-allowed"
+                className="flex items-center justify-center bg-gradient-to-r from-brand-500 to-accent-500 hover:from-brand-600 hover:to-accent-600 shadow-[0_4px_14px_0_rgba(244,63,94,0.39)] hover:shadow-[0_6px_20px_rgba(244,63,94,0.23)] hover:-translate-y-0.5 text-white px-6 py-2.5 rounded-xl font-medium transition-all shadow-sm disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {isPending ? (
                   <>

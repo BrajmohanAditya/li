@@ -46,9 +46,9 @@ const AddStudentModal = ({ isOpen, onClose, onSubmit, isPending }) => {
           <X className="w-5 h-5" />
         </button>
 
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 py-6 px-8">
+        <div className="bg-gradient-to-r from-brand-600 to-brand-700 py-6 px-8">
           <h2 className="text-3xl font-bold text-white text-center">Add New Student</h2>
-          <p className="text-blue-100 text-center mt-2">Fill in the details to register a student.</p>
+          <p className="text-brand-100 text-center mt-2">Fill in the details to register a student.</p>
         </div>
         
         <form onSubmit={handleSubmit} className="p-8 space-y-6">
@@ -66,7 +66,7 @@ const AddStudentModal = ({ isOpen, onClose, onSubmit, isPending }) => {
                   required
                   value={formData.name}
                   onChange={handleChange}
-                  className="pl-10 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm transition-colors"
+                  className="pl-10 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 sm:text-sm transition-colors"
                   placeholder="John Doe"
                 />
               </div>
@@ -85,7 +85,7 @@ const AddStudentModal = ({ isOpen, onClose, onSubmit, isPending }) => {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="pl-10 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm transition-colors"
+                  className="pl-10 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 sm:text-sm transition-colors"
                   placeholder="john@example.com"
                 />
               </div>
@@ -104,7 +104,7 @@ const AddStudentModal = ({ isOpen, onClose, onSubmit, isPending }) => {
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className="pl-10 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm transition-colors"
+                  className="pl-10 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 sm:text-sm transition-colors"
                   placeholder="••••••••"
                 />
               </div>
@@ -125,7 +125,7 @@ const AddStudentModal = ({ isOpen, onClose, onSubmit, isPending }) => {
                   title="Please enter a valid 10-digit phone number"
                   value={formData.number}
                   onChange={handleChange}
-                  className="pl-10 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm transition-colors"
+                  className="pl-10 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 sm:text-sm transition-colors"
                   placeholder="9876543210"
                 />
               </div>
@@ -144,7 +144,7 @@ const AddStudentModal = ({ isOpen, onClose, onSubmit, isPending }) => {
                   required
                   value={formData.state}
                   onChange={handleChange}
-                  className="pl-10 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm transition-colors"
+                  className="pl-10 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 sm:text-sm transition-colors"
                   placeholder="California"
                 />
               </div>
@@ -163,7 +163,7 @@ const AddStudentModal = ({ isOpen, onClose, onSubmit, isPending }) => {
                   required
                   value={formData.city}
                   onChange={handleChange}
-                  className="pl-10 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm transition-colors"
+                  className="pl-10 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 sm:text-sm transition-colors"
                   placeholder="Los Angeles"
                 />
               </div>
@@ -181,7 +181,7 @@ const AddStudentModal = ({ isOpen, onClose, onSubmit, isPending }) => {
                   required
                   value={formData.gender}
                   onChange={handleChange}
-                  className="pl-10 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm transition-colors bg-white"
+                  className="pl-10 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 sm:text-sm transition-colors bg-white"
                 >
                   <option value="" disabled>Select Gender</option>
                   <option value="Male">Male</option>
@@ -204,7 +204,7 @@ const AddStudentModal = ({ isOpen, onClose, onSubmit, isPending }) => {
                   rows="3"
                   value={formData.address}
                   onChange={handleChange}
-                  className="pl-10 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm transition-colors"
+                  className="pl-10 block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 sm:text-sm transition-colors"
                   placeholder="123 Main St, Apt 4B"
                 ></textarea>
               </div>
@@ -215,14 +215,14 @@ const AddStudentModal = ({ isOpen, onClose, onSubmit, isPending }) => {
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+              className="px-6 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isPending}
-              className="inline-flex justify-center items-center py-2.5 px-6 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-70 disabled:cursor-not-allowed transition-colors"
+              className="inline-flex justify-center items-center py-2.5 px-6 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-gradient-to-r from-brand-500 to-accent-500 hover:from-brand-600 hover:to-accent-600 shadow-[0_4px_14px_0_rgba(244,63,94,0.39)] hover:shadow-[0_6px_20px_rgba(244,63,94,0.23)] hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 disabled:opacity-70 disabled:cursor-not-allowed transition-colors"
             >
               {isPending ? (
                 <>

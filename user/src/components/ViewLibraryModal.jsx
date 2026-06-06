@@ -11,7 +11,7 @@ const ViewLibraryModal = ({ isOpen, onClose, library }) => {
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-100">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white font-bold text-lg">
+            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-purple-500 to-brand-600 flex items-center justify-center text-white font-bold text-lg">
               {library.name?.charAt(0)?.toUpperCase() || 'L'}
             </div>
             <div>
@@ -102,7 +102,7 @@ const ViewLibraryModal = ({ isOpen, onClose, library }) => {
                   href={library.website} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="text-sm text-indigo-600 hover:underline break-all"
+                  className="text-sm text-brand-600 hover:underline break-all"
                 >
                   {library.website}
                 </a>
@@ -135,7 +135,7 @@ const ViewLibraryModal = ({ isOpen, onClose, library }) => {
         <div className="p-4 sm:p-6 border-t border-gray-100 bg-gray-50 rounded-b-2xl flex justify-end">
           <button 
             onClick={onClose}
-            className="px-5 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-medium rounded-xl transition-colors shadow-sm"
+            className="px-5 py-2.5 bg-gradient-to-r from-purple-600 to-brand-600 hover:from-purple-700 hover:to-brand-700 text-white font-medium rounded-xl transition-colors shadow-sm"
           >
             Close
           </button>

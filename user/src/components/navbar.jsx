@@ -57,7 +57,7 @@ const Navbar = ({ toggleSidebar }) => {
             <img
               src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}&backgroundColor=b6e3f4`}
               alt="Profile"
-              className="w-9 h-9 rounded-full object-cover bg-blue-50"
+              className="w-9 h-9 rounded-full object-cover bg-brand-50"
             />
             <span className="text-sm font-medium text-gray-700">
               {user.name}
@@ -117,7 +117,7 @@ const Navbar = ({ toggleSidebar }) => {
           </Link>
           <Link
             to="/register"
-            className="px-5 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition-colors shadow-sm"
+            className="px-5 py-2 text-sm font-medium text-white bg-gradient-to-r from-brand-500 to-accent-500 hover:from-brand-600 hover:to-accent-600 shadow-[0_4px_14px_0_rgba(244,63,94,0.39)] hover:shadow-[0_6px_20px_rgba(244,63,94,0.23)] hover:-translate-y-0.5 rounded-xl transition-colors shadow-sm"
           >
             Signup
           </Link>

@@ -61,13 +61,13 @@ const CreatePlanModal = ({ isOpen, onClose }) => {
             {/* Library */}
             <div>
               <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
-                Select Library <span className="text-blue-500">*</span>
+                Select Library <span className="text-brand-500">*</span>
               </label>
               <div className="relative">
                 <select 
                   {...register("libraryId", { required: true })}
                   defaultValue="" 
-                  className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-700 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 appearance-none transition-all cursor-pointer"
+                  className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-700 outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 appearance-none transition-all cursor-pointer"
                 >
                   <option value="" disabled>
                     {isLoadingLibraries ? 'Loading libraries...' : 'Choose a library'}
@@ -87,13 +87,13 @@ const CreatePlanModal = ({ isOpen, onClose }) => {
             {/* Plan Name */}
             <div>
               <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
-                Plan Name <span className="text-blue-500">*</span>
+                Plan Name <span className="text-brand-500">*</span>
               </label>
               <input 
                 type="text" 
                 {...register("name", { required: true })}
                 placeholder="e.g., Basic Monthly, Premium Yearly"
-                className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-700 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400 placeholder:font-normal"
+                className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-700 outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all placeholder:text-slate-400 placeholder:font-normal"
               />
             </div>
 
@@ -101,13 +101,13 @@ const CreatePlanModal = ({ isOpen, onClose }) => {
             <div className="flex flex-col sm:flex-row gap-6">
               <div className="flex-1">
                 <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
-                  Plan Type <span className="text-blue-500">*</span>
+                  Plan Type <span className="text-brand-500">*</span>
                 </label>
                 <div className="relative">
                   <select 
                     {...register("planType", { required: true })}
                     defaultValue="MONTH" 
-                    className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-700 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 appearance-none transition-all cursor-pointer"
+                    className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-700 outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 appearance-none transition-all cursor-pointer"
                   >
                     <option value="HOURS">Hour(s)</option>
                     <option value="DAYS">Day(s)</option>
@@ -120,13 +120,13 @@ const CreatePlanModal = ({ isOpen, onClose }) => {
               </div>
               <div className="flex-1">
                 <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
-                  Duration Value <span className="text-blue-500">*</span>
+                  Duration Value <span className="text-brand-500">*</span>
                 </label>
                 <input 
                   type="number" 
                   {...register("duration", { required: true, valueAsNumber: true })}
                   defaultValue={1}
-                  className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-700 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                  className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-700 outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
                 />
               </div>
             </div>
@@ -134,13 +134,13 @@ const CreatePlanModal = ({ isOpen, onClose }) => {
             {/* Time Slot */}
             <div>
               <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
-                Time Slot <span className="text-blue-500">*</span>
+                Time Slot <span className="text-brand-500">*</span>
               </label>
               <input 
                 type="text" 
                 {...register("timeSlot", { required: true })}
                 placeholder="e.g., Morning (6:00 AM - 12:00 PM)"
-                className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-700 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400 placeholder:font-normal"
+                className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-700 outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all placeholder:text-slate-400 placeholder:font-normal"
               />
             </div>
 
@@ -148,14 +148,14 @@ const CreatePlanModal = ({ isOpen, onClose }) => {
             <div className="flex flex-col sm:flex-row gap-6">
               <div className="flex-1">
                 <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
-                  Start Time <span className="text-blue-500">*</span>
+                  Start Time <span className="text-brand-500">*</span>
                 </label>
                 <div className="relative">
                   <input 
                     type="time" 
                     {...register("startTime", { required: true })}
                     defaultValue="09:00"
-                    className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-700 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 appearance-none transition-all"
+                    className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-700 outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 appearance-none transition-all"
                     style={{ colorScheme: "light" }}
                   />
                   <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-slate-400">
@@ -165,14 +165,14 @@ const CreatePlanModal = ({ isOpen, onClose }) => {
               </div>
               <div className="flex-1">
                 <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
-                  End Time <span className="text-blue-500">*</span>
+                  End Time <span className="text-brand-500">*</span>
                 </label>
                 <div className="relative">
                   <input 
                     type="time" 
                     {...register("endTime", { required: true })}
                     defaultValue="17:00"
-                    className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-700 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 appearance-none transition-all"
+                    className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-700 outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 appearance-none transition-all"
                     style={{ colorScheme: "light" }}
                   />
                   <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-slate-400">
@@ -185,7 +185,7 @@ const CreatePlanModal = ({ isOpen, onClose }) => {
             {/* Price */}
             <div>
               <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
-                Price (₹) <span className="text-blue-500">*</span>
+                Price (₹) <span className="text-brand-500">*</span>
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -195,7 +195,7 @@ const CreatePlanModal = ({ isOpen, onClose }) => {
                   type="number" 
                   {...register("price", { required: true, valueAsNumber: true })}
                   placeholder="0.00"
-                  className="w-full pl-8 pr-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-700 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:font-normal"
+                  className="w-full pl-8 pr-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-700 outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all placeholder:font-normal"
                 />
               </div>
             </div>
@@ -214,7 +214,7 @@ const CreatePlanModal = ({ isOpen, onClose }) => {
             type="submit" 
             form="create-plan-form"
             disabled={isPending}
-            className="flex-1 px-4 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-colors flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+            className="flex-1 px-4 py-3 bg-gradient-to-r from-brand-500 to-accent-500 hover:from-brand-600 hover:to-accent-600 shadow-[0_4px_14px_0_rgba(244,63,94,0.39)] hover:shadow-[0_6px_20px_rgba(244,63,94,0.23)] hover:-translate-y-0.5 text-white font-bold rounded-xl transition-colors flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
           >
             {isPending && <Loader2 className="w-5 h-5 animate-spin" />}
             Create Plan

@@ -3,6 +3,7 @@ import { BookOpen, Plus, Search, Filter, ChevronDown, Eye, Pencil, Trash2, Phone
 import CreateLibraryModal from '../../components/CreateLibraryModal';
 import ViewLibraryModal from '../../components/ViewLibraryModal';
 import EditLibraryModal from '../../components/EditLibraryModal';
+import DeleteConfirmationModal from '../../components/DeleteConfirmationModal';
 import { createLibraryHook, getAllLibrariesHook, getAllLibrariesInDetailsHook, updateLibraryHook, deleteLibraryHook } from '../../hooks/library.hook';
 
 const ManageLibrary = () => {
@@ -10,9 +11,10 @@ const ManageLibrary = () => {
   const [statusFilter, setStatusFilter] = useState('All Status');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // View & Edit modal state
+  // View & Edit & Delete modal state
   const [viewLibrary, setViewLibrary] = useState(null);
   const [editLibrary, setEditLibrary] = useState(null);
+  const [deleteModalData, setDeleteModalData] = useState({ isOpen: false, id: null, name: '' });
 
   const { mutate: createLibrary, isPending: isCreating } = createLibraryHook();
   const { mutate: updateLibrary, isPending: isUpdating } = updateLibraryHook();
@@ -33,8 +35,16 @@ const ManageLibrary = () => {
   });
 
   const handleDelete = (id, name) => {
-    if (window.confirm(`Are you sure you want to delete "${name}"?`)) {
-      deleteLibrary(id);
+    setDeleteModalData({ isOpen: true, id, name });
+  };
+
+  const confirmDelete = () => {
+    if (deleteModalData.id) {
+      deleteLibrary(deleteModalData.id, {
+        onSuccess: () => {
+          setDeleteModalData({ isOpen: false, id: null, name: '' });
+        }
+      });
     }
   };
 
@@ -56,7 +66,7 @@ const ManageLibrary = () => {
         
         <button 
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-5 py-2.5 rounded-xl font-medium transition-all shadow-sm"
+          className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-brand-600 hover:from-purple-700 hover:to-brand-700 text-white px-5 py-2.5 rounded-xl font-medium transition-all shadow-sm"
         >
           <Plus className="w-5 h-5" />
           Add New Library
@@ -149,7 +159,7 @@ const ManageLibrary = () => {
                       {/* Library Name + ID */}
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shrink-0">
+                          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-brand-600 flex items-center justify-center text-white font-bold text-sm shrink-0">
                             {lib.name?.charAt(0)?.toUpperCase() || 'L'}
                           </div>
                           <div>
@@ -201,7 +211,7 @@ const ManageLibrary = () => {
                         <div className="flex items-center justify-center gap-2">
                           <button 
                             onClick={() => setViewLibrary(lib)}
-                            className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                            className="p-2 text-gray-400 hover:text-brand-600 hover:bg-brand-50 rounded-lg transition-colors"
                             title="View"
                           >
                             <Eye className="w-4 h-4" />
@@ -236,7 +246,7 @@ const ManageLibrary = () => {
                   {/* Header Row */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shrink-0">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-brand-600 flex items-center justify-center text-white font-bold text-sm shrink-0">
                         {lib.name?.charAt(0)?.toUpperCase() || 'L'}
                       </div>
                       <div>
@@ -269,7 +279,7 @@ const ManageLibrary = () => {
                   <div className="flex items-center gap-2 pt-1">
                     <button 
                       onClick={() => setViewLibrary(lib)}
-                      className="flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+                      className="flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-medium text-brand-600 bg-brand-50 rounded-lg hover:bg-brand-100 transition-colors"
                     >
                       <Eye className="w-3.5 h-3.5" /> View
                     </button>
@@ -334,6 +344,17 @@ const ManageLibrary = () => {
             }
           });
         }}
+      />
+
+      {/* Delete Confirmation Modal */}
+      <DeleteConfirmationModal
+        isOpen={deleteModalData.isOpen}
+        onClose={() => setDeleteModalData({ isOpen: false, id: null, name: '' })}
+        onConfirm={confirmDelete}
+        title="Delete Library"
+        message="Are you sure you want to delete this library? All associated sheets, plans, and bookings might be affected. This action cannot be undone."
+        itemName={deleteModalData.name}
+        isPending={isDeleting}
       />
     </div>
   );

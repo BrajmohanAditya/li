@@ -46,7 +46,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       {/* Header */}
       <div className="p-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-indigo-600 shadow-lg shadow-indigo-200 flex items-center justify-center text-white font-bold text-xl">
+          <div className="w-12 h-12 rounded-xl bg-brand-600 shadow-lg shadow-brand-200 flex items-center justify-center text-white font-bold text-xl">
             L
           </div>
 
@@ -79,7 +79,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               }}
               className={`w-full flex items-center justify-between px-4 py-4 rounded-2xl transition-all ${
                 isActive
-                  ? "bg-indigo-600 text-white shadow-lg shadow-indigo-200"
+                  ? "bg-brand-600 text-white shadow-lg shadow-brand-200"
                   : "text-slate-500 hover:bg-slate-50 hover:text-slate-900 cursor-pointer"
               }`}
             >

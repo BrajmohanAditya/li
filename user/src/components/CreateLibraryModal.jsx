@@ -315,7 +315,7 @@ const CreateLibraryModal = ({ isOpen, onClose, onSubmit }) => {
           <button 
             type="submit"
             form="library-form"
-            className="w-full sm:w-auto px-5 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-medium rounded-xl transition-colors shadow-sm"
+            className="w-full sm:w-auto px-5 py-2.5 bg-gradient-to-r from-purple-600 to-brand-600 hover:from-purple-700 hover:to-brand-700 text-white font-medium rounded-xl transition-colors shadow-sm"
           >
             Create Library
           </button>

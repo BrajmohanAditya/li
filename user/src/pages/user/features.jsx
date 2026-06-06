@@ -3,11 +3,13 @@ import { Book, ChevronDown, Search, Star, Trash2, Edit, Loader2, Sparkles, Plus 
 import { getAllLibrariesHook } from '../../hooks/library.hook';
 import { getFeaturesByLibraryIdHook, deleteFeatureHook, createFeatureHook } from '../../hooks/feature.hook';
 import AddFeatureModal from '../../components/AddFeatureModal';
+import DeleteConfirmationModal from '../../components/DeleteConfirmationModal';
 
 const FeaturesManagement = () => {
   const [selectedLibrary, setSelectedLibrary] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [deleteModalData, setDeleteModalData] = useState({ isOpen: false, id: null, name: '' });
 
   // Fetch libraries
   const { data: librariesData, isLoading: isLoadingLibraries, isError: isLibrariesError } = getAllLibrariesHook();
@@ -40,8 +42,16 @@ const FeaturesManagement = () => {
   });
 
   const handleDelete = (id, name) => {
-    if (window.confirm(`Are you sure you want to delete the feature "${name}"?`)) {
-      deleteFeature(id);
+    setDeleteModalData({ isOpen: true, id, name });
+  };
+
+  const confirmDelete = () => {
+    if (deleteModalData.id) {
+      deleteFeature(deleteModalData.id, {
+        onSuccess: () => {
+          setDeleteModalData({ isOpen: false, id: null, name: '' });
+        }
+      });
     }
   };
 
@@ -49,9 +59,9 @@ const FeaturesManagement = () => {
     <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-6">
       
       {/* Header Banner Section */}
-      <div className="bg-gradient-to-r from-[#1A1C2E] to-[#3B3A6F] rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 shadow-sm relative overflow-hidden">
+      <div className="bg-gradient-to-r from-brand-600 to-accent-600 rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 shadow-md relative overflow-hidden">
         {/* Background Decorative Element */}
-        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-indigo-500/10 blur-3xl pointer-events-none"></div>
+        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-white/20 blur-3xl pointer-events-none"></div>
         
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-2">
@@ -76,14 +86,14 @@ const FeaturesManagement = () => {
       {/* Select Library Section */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
         <div className="flex items-center gap-2 mb-4">
-          <Book className="w-4 h-4 text-indigo-600" />
+          <Book className="w-4 h-4 text-brand-600" />
           <h2 className="text-sm font-bold text-slate-800">Select Library</h2>
         </div>
         
         <div className="relative">
           {isLoadingLibraries ? (
             <div className="w-full flex items-center justify-center py-3 bg-slate-50 border border-gray-200 rounded-xl">
-              <Loader2 className="w-5 h-5 animate-spin text-indigo-500" />
+              <Loader2 className="w-5 h-5 animate-spin text-brand-500" />
             </div>
           ) : isLibrariesError ? (
             <div className="w-full py-3 px-4 bg-red-50 border border-red-200 text-red-600 rounded-xl text-sm">
@@ -97,7 +107,7 @@ const FeaturesManagement = () => {
                   setSelectedLibrary(e.target.value);
                   setSearchTerm('');
                 }}
-                className="w-full appearance-none bg-white border border-gray-200 text-slate-700 text-sm rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 cursor-pointer transition-all shadow-sm"
+                className="w-full appearance-none bg-white border border-gray-200 text-slate-700 text-sm rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 cursor-pointer transition-all shadow-sm"
               >
                 <option value="" disabled>Choose a library...</option>
                 {libraries.map((lib) => (
@@ -135,7 +145,7 @@ const FeaturesManagement = () => {
                 placeholder="Search features..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-9 pr-4 py-2.5 bg-white border border-gray-200 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-100 rounded-xl text-sm transition-all"
+                className="w-full pl-9 pr-4 py-2.5 bg-white border border-gray-200 focus:border-brand-300 focus:ring-2 focus:ring-brand-100 rounded-xl text-sm transition-all"
               />
             </div>
           </div>
@@ -144,7 +154,7 @@ const FeaturesManagement = () => {
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mt-4">
             {isLoadingFeatures ? (
                <div className="flex flex-col items-center justify-center py-20 text-gray-400">
-                 <Loader2 className="w-10 h-10 animate-spin mb-3 text-indigo-500" />
+                 <Loader2 className="w-10 h-10 animate-spin mb-3 text-brand-500" />
                  <p className="text-sm font-medium">Loading features...</p>
                </div>
             ) : filteredFeatures.length === 0 ? (
@@ -172,7 +182,7 @@ const FeaturesManagement = () => {
                         <td className="px-6 py-4 text-sm text-slate-600 font-medium">{index + 1}</td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-xl bg-indigo-500 flex items-center justify-center text-white shadow-sm shadow-indigo-200 shrink-0">
+                            <div className="w-10 h-10 rounded-xl bg-brand-500 flex items-center justify-center text-white shadow-sm shadow-brand-200 shrink-0">
                               <Star className="w-5 h-5 fill-current" />
                             </div>
                             <span className="font-bold text-slate-800 capitalize">{feature.featureName || feature.name || feature.feature}</span>
@@ -195,7 +205,7 @@ const FeaturesManagement = () => {
                         <td className="px-6 py-4">
                           <div className="flex items-center justify-end gap-2">
                             <button 
-                              className="text-xs font-semibold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition-colors"
+                              className="text-xs font-semibold text-brand-600 bg-brand-50 hover:bg-brand-100 px-3 py-1.5 rounded-lg transition-colors"
                               title="Edit Feature"
                             >
                               Edit
@@ -227,6 +237,17 @@ const FeaturesManagement = () => {
         libraries={libraries}
         onSubmit={handleAddSubmit}
         isPending={isAdding}
+      />
+
+      {/* Delete Confirmation Modal */}
+      <DeleteConfirmationModal
+        isOpen={deleteModalData.isOpen}
+        onClose={() => setDeleteModalData({ isOpen: false, id: null, name: '' })}
+        onConfirm={confirmDelete}
+        title="Delete Feature"
+        message="Are you sure you want to delete this feature? This action cannot be undone."
+        itemName={`Feature Name: ${deleteModalData.name}`}
+        isPending={isDeleting}
       />
     </div>
   );

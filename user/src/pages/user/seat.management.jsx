@@ -83,7 +83,7 @@ const SeatManagement = () => {
             <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Total Bookings</p>
             <p className="text-3xl font-bold text-slate-800">0</p>
           </div>
-          <div className="p-3 bg-indigo-500 rounded-xl shadow-sm">
+          <div className="p-3 bg-brand-500 rounded-xl shadow-sm">
             <Calendar className="w-6 h-6 text-white" />
           </div>
         </div>
@@ -116,7 +116,7 @@ const SeatManagement = () => {
             <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Sheets Booked</p>
             <p className="text-3xl font-bold text-slate-800">0</p>
           </div>
-          <div className="p-3 bg-blue-600 rounded-xl shadow-sm">
+          <div className="p-3 bg-brand-600 rounded-xl shadow-sm">
             <BookOpen className="w-6 h-6 text-white" />
           </div>
         </div>
@@ -132,7 +132,7 @@ const SeatManagement = () => {
         <div className="relative">
           {isLoading ? (
             <div className="w-full flex items-center justify-center py-3 bg-slate-50 border border-gray-200 rounded-xl">
-              <Loader2 className="w-5 h-5 animate-spin text-indigo-500" />
+              <Loader2 className="w-5 h-5 animate-spin text-brand-500" />
             </div>
           ) : isError ? (
             <div className="w-full py-3 px-4 bg-red-50 border border-red-200 text-red-600 rounded-xl text-sm">
@@ -147,7 +147,7 @@ const SeatManagement = () => {
                   setSelectedSheet('');
                   setSelectedPlan('');
                 }}
-                className="w-full appearance-none bg-slate-50 border border-gray-200 text-slate-700 text-sm rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 cursor-pointer transition-all"
+                className="w-full appearance-none bg-slate-50 border border-gray-200 text-slate-700 text-sm rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 cursor-pointer transition-all"
               >
                 <option value="" disabled>Choose a library...</option>
                 {libraries.map((lib) => (
@@ -165,7 +165,7 @@ const SeatManagement = () => {
       {/* Booking Form Section */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mt-6">
         <h2 className="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
-          <CheckCircle className="w-5 h-5 text-indigo-600" /> Book a Seat
+          <CheckCircle className="w-5 h-5 text-brand-600" /> Book a Seat
         </h2>
         <form onSubmit={handleBookSeat} className="grid grid-cols-1 md:grid-cols-3 gap-6">
           
@@ -178,7 +178,7 @@ const SeatManagement = () => {
                 disabled={!selectedLibrary}
                 value={selectedStudent}
                 onChange={(e) => setSelectedStudent(e.target.value)}
-                className="w-full appearance-none bg-white border border-gray-200 text-slate-700 text-sm rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 cursor-pointer transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50"
+                className="w-full appearance-none bg-white border border-gray-200 text-slate-700 text-sm rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 cursor-pointer transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50"
               >
                 <option value="" disabled>
                   {!selectedLibrary ? "Select a library first" : "Choose a student..."}
@@ -200,7 +200,7 @@ const SeatManagement = () => {
                 disabled={!selectedLibrary || isLoadingPlans}
                 value={selectedPlan}
                 onChange={(e) => setSelectedPlan(e.target.value)}
-                className="w-full appearance-none bg-white border border-gray-200 text-slate-700 text-sm rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 cursor-pointer transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50"
+                className="w-full appearance-none bg-white border border-gray-200 text-slate-700 text-sm rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 cursor-pointer transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50"
               >
                 <option value="" disabled>
                   {!selectedLibrary ? "Select a library first" : (isLoadingPlans ? 'Loading plans...' : 'Choose a plan...')}
@@ -222,7 +222,7 @@ const SeatManagement = () => {
                 disabled={!selectedLibrary}
                 value={selectedSheet}
                 onChange={(e) => setSelectedSheet(e.target.value)}
-                className="w-full appearance-none bg-white border border-gray-200 text-slate-700 text-sm rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 cursor-pointer transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50"
+                className="w-full appearance-none bg-white border border-gray-200 text-slate-700 text-sm rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 cursor-pointer transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50"
               >
                 <option value="" disabled>
                   {!selectedLibrary ? "Select a library first" : "Choose an available seat..."}
@@ -240,7 +240,7 @@ const SeatManagement = () => {
             <button
               type="submit"
               disabled={isBooking || !selectedLibrary}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-xl font-bold transition-all shadow-sm disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2"
+              className="bg-gradient-to-r from-brand-500 to-accent-500 hover:from-brand-600 hover:to-accent-600 shadow-[0_4px_14px_0_rgba(244,63,94,0.39)] hover:shadow-[0_6px_20px_rgba(244,63,94,0.23)] hover:-translate-y-0.5 text-white px-8 py-3 rounded-xl font-bold transition-all shadow-sm disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-2"
             >
               {isBooking && <Loader2 className="w-5 h-5 animate-spin" />}
               Confirm Booking

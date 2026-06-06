@@ -4,6 +4,7 @@ import { getAllLibrariesHook } from '../../hooks/library.hook';
 import { getSheetByIdHook, createSheetHook, deleteSheetHook, updateSheetHook } from '../../hooks/seat.create.hook';
 import CreateSheetModal from '../../components/CreateSheetModal';
 import EditSheetModal from '../../components/EditSheetModal';
+import DeleteConfirmationModal from '../../components/DeleteConfirmationModal';
 
 const CreateSeatPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -13,6 +14,7 @@ const CreateSeatPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingSheet, setEditingSheet] = useState(null);
+  const [deleteModalData, setDeleteModalData] = useState({ isOpen: false, id: null, sheetNumber: '' });
 
   const { mutate: createSheet, isPending: isCreating } = createSheetHook();
   const { mutate: deleteSheet } = deleteSheetHook();
@@ -36,6 +38,16 @@ const CreateSeatPage = () => {
         setEditingSheet(null);
       }
     });
+  };
+
+  const confirmDelete = () => {
+    if (deleteModalData.id) {
+      deleteSheet(deleteModalData.id, {
+        onSuccess: () => {
+          setDeleteModalData({ isOpen: false, id: null, sheetNumber: '' });
+        }
+      });
+    }
   };
 
   const { data: librariesData, isLoading: isLoadingLibraries } = getAllLibrariesHook();
@@ -64,7 +76,7 @@ const CreateSeatPage = () => {
         
         <button 
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl font-medium transition-all shadow-sm"
+          className="flex items-center gap-2 bg-gradient-to-r from-brand-500 to-accent-500 hover:from-brand-600 hover:to-accent-600 text-white px-5 py-2.5 rounded-xl font-medium shadow-[0_4px_14px_0_rgba(244,63,94,0.39)] hover:shadow-[0_6px_20px_rgba(244,63,94,0.23)] hover:-translate-y-0.5 transition-all duration-200 ease-in-out"
         >
           <Plus className="w-5 h-5" />
           Create Sheet
@@ -72,7 +84,7 @@ const CreateSeatPage = () => {
       </div>
 
       {/* Search Section */}
-      <div className="bg-indigo-50/50 rounded-2xl shadow-sm border border-indigo-50 p-6">
+      <div className="bg-brand-50/50 rounded-2xl shadow-sm border border-brand-50 p-6">
         <label className="flex items-center gap-2 text-sm font-bold text-slate-700 mb-3">
           <Search className="w-4 h-4 text-slate-500" />
           Search Sheet by ID or Number
@@ -83,9 +95,9 @@ const CreateSeatPage = () => {
             placeholder="Enter Sheet ID (e.g., bc3a7750-97cb-473a-a243-91fcb3492a40)"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="flex-1 bg-white border border-gray-200 text-slate-700 text-sm rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-sm"
+            className="flex-1 bg-white border border-gray-200 text-slate-700 text-sm rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all shadow-sm"
           />
-          <button className="flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-medium transition-all shadow-sm whitespace-nowrap">
+          <button className="flex items-center justify-center gap-2 bg-gradient-to-r from-brand-500 to-accent-500 hover:from-brand-600 hover:to-accent-600 text-white px-6 py-3 rounded-xl font-medium shadow-[0_4px_14px_0_rgba(244,63,94,0.39)] hover:shadow-[0_6px_20px_rgba(244,63,94,0.23)] hover:-translate-y-0.5 transition-all duration-200 ease-in-out whitespace-nowrap">
             <Search className="w-4 h-4" />
             Search
           </button>
@@ -102,14 +114,14 @@ const CreateSeatPage = () => {
           <div className="relative flex-1 w-full">
             {isLoadingLibraries ? (
               <div className="w-full flex items-center justify-center py-3 bg-slate-50 border border-gray-200 rounded-xl">
-                <Loader2 className="w-5 h-5 animate-spin text-indigo-500" />
+                <Loader2 className="w-5 h-5 animate-spin text-brand-500" />
               </div>
             ) : (
               <>
                 <select
                   value={selectedLibrary}
                   onChange={(e) => setSelectedLibrary(e.target.value)}
-                  className="w-full appearance-none bg-white border border-gray-200 text-slate-700 text-sm rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 cursor-pointer transition-all shadow-sm"
+                  className="w-full appearance-none bg-white border border-gray-200 text-slate-700 text-sm rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 cursor-pointer transition-all shadow-sm"
                 >
                   <option value="" disabled>Select a library...</option>
                   {libraries.map((lib) => (
@@ -128,7 +140,7 @@ const CreateSeatPage = () => {
               onClick={() => setViewMode('grid')}
               className={`p-3 rounded-xl flex items-center justify-center transition-all ${
                 viewMode === 'grid' 
-                  ? 'bg-indigo-100 text-indigo-700 border border-indigo-200' 
+                  ? 'bg-brand-100 text-brand-700 border border-brand-200' 
                   : 'bg-slate-50 text-slate-400 border border-transparent hover:bg-slate-100 hover:text-slate-600'
               }`}
             >
@@ -138,7 +150,7 @@ const CreateSeatPage = () => {
               onClick={() => setViewMode('list')}
               className={`p-3 rounded-xl flex items-center justify-center transition-all ${
                 viewMode === 'list' 
-                  ? 'bg-indigo-100 text-indigo-700 border border-indigo-200' 
+                  ? 'bg-brand-100 text-brand-700 border border-brand-200' 
                   : 'bg-slate-50 text-slate-400 border border-transparent hover:bg-slate-100 hover:text-slate-600'
               }`}
             >
@@ -168,14 +180,14 @@ const CreateSeatPage = () => {
                 placeholder="Search sheets..."
                 value={sheetSearchTerm}
                 onChange={(e) => setSheetSearchTerm(e.target.value)}
-                className="w-full bg-slate-50 border border-gray-200 text-slate-700 text-sm rounded-xl pl-9 pr-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                className="w-full bg-slate-50 border border-gray-200 text-slate-700 text-sm rounded-xl pl-9 pr-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all"
               />
             </div>
           </div>
 
           {isLoadingSheets ? (
              <div className="flex justify-center items-center py-12">
-               <Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
+               <Loader2 className="w-8 h-8 animate-spin text-brand-500" />
              </div>
           ) : filteredSheets.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-4">
@@ -207,16 +219,14 @@ const CreateSeatPage = () => {
                         setEditingSheet(sheet);
                         setIsEditModalOpen(true);
                       }}
-                      className="bg-white text-indigo-600 font-medium text-xs px-3 py-1.5 rounded shadow-sm hover:bg-indigo-50 transition-colors"
+                      className="bg-white text-brand-600 font-medium text-xs px-3 py-1.5 rounded shadow-sm hover:bg-brand-50 transition-colors"
                     >
                       Edit
                     </button>
                     <button 
                       onClick={(e) => {
                         e.stopPropagation();
-                        if (window.confirm(`Are you sure you want to delete sheet ${sheet.sheetNumber}?`)) {
-                          deleteSheet(sheet.id);
-                        }
+                        setDeleteModalData({ isOpen: true, id: sheet.id, sheetNumber: sheet.sheetNumber });
                       }}
                       className="bg-white text-red-500 font-medium text-xs px-3 py-1.5 rounded shadow-sm hover:bg-red-50 transition-colors"
                     >
@@ -247,6 +257,16 @@ const CreateSeatPage = () => {
         onSubmit={handleEditSubmit}
         isPending={isUpdating}
         sheet={editingSheet}
+      />
+
+      <DeleteConfirmationModal
+        isOpen={deleteModalData.isOpen}
+        onClose={() => setDeleteModalData({ isOpen: false, id: null, sheetNumber: '' })}
+        onConfirm={confirmDelete}
+        title="Delete Sheet"
+        message={`Are you sure you want to delete this sheet? This action cannot be undone.`}
+        itemName={`Sheet Number: ${deleteModalData.sheetNumber}`}
+        isPending={false} /* deleteSheet doesn't return isPending directly here but can add later */
       />
     </div>
   );

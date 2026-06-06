@@ -29,7 +29,7 @@ const SubscriptionPlans = () => {
       {/* Header Section */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="flex items-center gap-4">
-          <div className="bg-indigo-600 p-3 rounded-xl shadow-sm flex items-center justify-center">
+          <div className="bg-brand-600 p-3 rounded-xl shadow-sm flex items-center justify-center">
             <Package className="w-6 h-6 text-white" />
           </div>
           <div>
@@ -39,7 +39,7 @@ const SubscriptionPlans = () => {
         </div>
         <button 
           onClick={() => setIsModalOpen(true)}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg flex items-center gap-2 font-medium transition-colors shadow-sm"
+          className="bg-gradient-to-r from-brand-500 to-accent-500 hover:from-brand-600 hover:to-accent-600 shadow-[0_4px_14px_0_rgba(244,63,94,0.39)] hover:shadow-[0_6px_20px_rgba(244,63,94,0.23)] hover:-translate-y-0.5 text-white px-5 py-2.5 rounded-lg flex items-center gap-2 font-medium transition-colors shadow-sm"
         >
           <Plus className="w-5 h-5" />
           Create Plan
@@ -62,7 +62,7 @@ const SubscriptionPlans = () => {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm transition-colors outline-none"
+                className="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm transition-colors outline-none"
                 placeholder="Search by plan name or library..."
               />
             </div>
@@ -74,7 +74,7 @@ const SubscriptionPlans = () => {
               <Filter className="w-3.5 h-3.5" /> Plan Type
             </label>
             <div className="relative">
-              <select className="appearance-none block w-full pl-3 pr-10 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm bg-white transition-colors outline-none cursor-pointer">
+              <select className="appearance-none block w-full pl-3 pr-10 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm bg-white transition-colors outline-none cursor-pointer">
                 <option>All Types</option>
               </select>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
@@ -89,7 +89,7 @@ const SubscriptionPlans = () => {
               <Filter className="w-3.5 h-3.5" /> Slot Type
             </label>
             <div className="relative">
-              <select className="appearance-none block w-full pl-3 pr-10 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm bg-white transition-colors outline-none cursor-pointer">
+              <select className="appearance-none block w-full pl-3 pr-10 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm bg-white transition-colors outline-none cursor-pointer">
                 <option>All Slots</option>
               </select>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
@@ -107,7 +107,7 @@ const SubscriptionPlans = () => {
               <select 
                 value={selectedLibrary}
                 onChange={(e) => setSelectedLibrary(e.target.value)}
-                className="appearance-none block w-full pl-3 pr-10 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm bg-white transition-colors outline-none cursor-pointer"
+                className="appearance-none block w-full pl-3 pr-10 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 text-sm bg-white transition-colors outline-none cursor-pointer"
               >
                 <option value="">All Libraries</option>
                 {libraries.map(lib => (

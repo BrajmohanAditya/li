@@ -20,11 +20,11 @@ const Login = () => {
 
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-indigo-50 via-white to-indigo-100 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-brand-50 via-white to-brand-100 px-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="w-14 h-14 mx-auto mb-3 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-2xl font-bold">
+          <div className="w-14 h-14 mx-auto mb-3 rounded-xl bg-brand-600 text-white flex items-center justify-center text-2xl font-bold">
             <GraduationCap className="w-8 h-8 animate-bounce" />
           </div>
           <h1 className="text-2xl font-bold text-gray-900">Login  Account</h1>
@@ -49,7 +49,7 @@ const Login = () => {
                 type="email"
                 placeholder="you@example.com"
                 {...register("email", { required: true })}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition"
               />
             </div>
           </div>
@@ -68,7 +68,7 @@ const Login = () => {
                 type="password"
                 placeholder="••••••••"
                 {...register("password", { required: true })}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition"
               />
             </div>
           </div>
@@ -77,7 +77,7 @@ const Login = () => {
           <button
             type="submit"
             disabled={isPending}
-            className="w-full py-3 rounded-xl bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition-all disabled:opacity-60 flex items-center justify-center"
+            className="w-full py-3 rounded-xl bg-brand-600 text-white font-semibold hover:bg-brand-700 transition-all disabled:opacity-60 flex items-center justify-center"
           >
             {isPending ? (
               <Loader2 className="animate-spin mr-2" size={20} />
@@ -92,7 +92,7 @@ const Login = () => {
           Don't have an account?{" "}
           <Link
             to="/register"
-            className="text-indigo-600 font-medium hover:underline"
+            className="text-brand-600 font-medium hover:underline"
           >
             Register
           </Link>

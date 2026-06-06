@@ -60,8 +60,8 @@ const Feedback = () => {
       title: 'TOTAL FEEDBACKS',
       value: totalFeedbacks.toString(),
       icon: MessageSquare,
-      color: 'text-indigo-600',
-      bgColor: 'bg-indigo-600',
+      color: 'text-brand-600',
+      bgColor: 'bg-brand-600',
     },
     {
       title: 'AVERAGE RATING',
@@ -81,8 +81,8 @@ const Feedback = () => {
       title: 'POSITIVE FEEDBACK',
       value: positiveFeedbacks.toString(),
       icon: ThumbsUp,
-      color: 'text-blue-500',
-      bgColor: 'bg-blue-600',
+      color: 'text-brand-500',
+      bgColor: 'bg-brand-600',
     }
   ];
 
@@ -106,8 +106,8 @@ const Feedback = () => {
       {/* Header Card */}
       <div className="bg-white rounded-2xl p-6 shadow-sm flex justify-between items-center border border-slate-100">
         <div className="flex items-center gap-4">
-          <div className="bg-indigo-100 p-3 rounded-xl">
-            <MessageSquare className="w-6 h-6 text-indigo-600" />
+          <div className="bg-brand-100 p-3 rounded-xl">
+            <MessageSquare className="w-6 h-6 text-brand-600" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-slate-800">Feedback Management</h1>
@@ -146,7 +146,7 @@ const Feedback = () => {
         </div>
         <div className="relative max-w-md">
           <select 
-            className="w-full appearance-none bg-slate-50 border border-slate-200 text-slate-700 py-2.5 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-medium text-sm"
+            className="w-full appearance-none bg-slate-50 border border-slate-200 text-slate-700 py-2.5 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 font-medium text-sm"
             value={selectedLibrary}
             onChange={(e) => setSelectedLibrary(e.target.value)}
           >
@@ -173,14 +173,14 @@ const Feedback = () => {
               <input 
                 type="text" 
                 placeholder="Search by user name..." 
-                className="pl-9 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 bg-white w-64"
+                className="pl-9 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 bg-white w-64"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
             <div className="relative">
               <select 
-                className="appearance-none bg-white border border-slate-200 text-slate-700 py-2 pl-4 pr-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-medium text-sm"
+                className="appearance-none bg-white border border-slate-200 text-slate-700 py-2 pl-4 pr-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 font-medium text-sm"
                 value={ratingFilter}
                 onChange={(e) => setRatingFilter(e.target.value)}
               >
@@ -198,7 +198,7 @@ const Feedback = () => {
 
         {feedbacksLoading ? (
           <div className="flex justify-center py-10">
-            <div className="w-8 h-8 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-4 border-brand-200 border-t-brand-600 rounded-full animate-spin"></div>
           </div>
         ) : filteredFeedbacks.length === 0 ? (
           <div className="bg-white rounded-2xl p-10 text-center border border-slate-100 shadow-sm mt-4">
@@ -217,10 +217,10 @@ const Feedback = () => {
               
               const ratingValue = Number(feedback.rating || feedback.rate || feedback.stars || 0);
               const isPositive = ratingValue >= 4;
-              const badgeColor = isPositive ? 'bg-emerald-50 text-emerald-600' : 'bg-blue-50 text-blue-600';
+              const badgeColor = isPositive ? 'bg-emerald-50 text-emerald-600' : 'bg-brand-50 text-brand-600';
               
               // Get an arbitrary background color for avatar based on first letter
-              const colors = ['bg-indigo-500', 'bg-blue-500', 'bg-emerald-500', 'bg-amber-500', 'bg-rose-500', 'bg-purple-500'];
+              const colors = ['bg-brand-500', 'bg-brand-500', 'bg-emerald-500', 'bg-amber-500', 'bg-rose-500', 'bg-purple-500'];
               const colorIndex = userName.length > 0 ? userName.charCodeAt(0) % colors.length : 0;
               const avatarColor = colors[colorIndex];
 

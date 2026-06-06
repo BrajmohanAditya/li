@@ -1,5 +1,23 @@
 @import "tailwindcss";
 
+@theme {
+  /* Sunset Rose Theme - Vibrant & Engaging */
+  --color-brand-50: #fff1f2;
+  --color-brand-100: #ffe4e6;
+  --color-brand-200: #fecdd3;
+  --color-brand-300: #fda4af;
+  --color-brand-400: #fb7185;
+  --color-brand-500: #f43f5e;
+  --color-brand-600: #e11d48; /* Primary Brand */
+  --color-brand-700: #be123c; /* Hover Brand */
+  --color-brand-800: #9f1239;
+  --color-brand-900: #881337;
+  
+  /* Accent Orange for gradients and highlights */
+  --color-accent-500: #f97316;
+  --color-accent-600: #ea580c;
+}
+
 /* Custom Thin Scrollbar for Sidebar */
 .scrollbar-thin::-webkit-scrollbar {
   width: 4px;

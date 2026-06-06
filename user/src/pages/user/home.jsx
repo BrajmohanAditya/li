@@ -16,7 +16,7 @@ const Home = () => {
 
   if (isLoading) return (
     <div className="min-h-[88vh] flex items-center justify-center bg-slate-50">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-600"></div>
     </div>
   );
 
@@ -33,8 +33,8 @@ const Home = () => {
   const recentFeedbacks = data?.recentFeedbacks || [];
 
   const overviewCards = [
-    { title: "Total Users", value: overview.totalUsers || 0, icon: <Users className="w-8 h-8 text-blue-500" />, bg: "bg-blue-50" },
-    { title: "Total Libraries", value: overview.totalLibraries || 0, icon: <Library className="w-8 h-8 text-indigo-500" />, bg: "bg-indigo-50" },
+    { title: "Total Users", value: overview.totalUsers || 0, icon: <Users className="w-8 h-8 text-brand-500" />, bg: "bg-brand-50" },
+    { title: "Total Libraries", value: overview.totalLibraries || 0, icon: <Library className="w-8 h-8 text-brand-500" />, bg: "bg-brand-50" },
     { title: "Total Bookings", value: overview.totalBookings || 0, icon: <BookMarked className="w-8 h-8 text-emerald-500" />, bg: "bg-emerald-50" },
     { title: "Active Bookings", value: overview.activeBookings || 0, icon: <Activity className="w-8 h-8 text-amber-500" />, bg: "bg-amber-50" },
     { title: "Total Revenue", value: `₹${overview.totalRevenue || 0}`, icon: <IndianRupee className="w-8 h-8 text-rose-500" />, bg: "bg-rose-50" },

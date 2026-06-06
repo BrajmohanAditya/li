@@ -52,7 +52,7 @@ const ManageStudent = () => {
         
         <button 
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl font-medium transition-all shadow-sm"
+          className="flex items-center gap-2 bg-gradient-to-r from-brand-500 to-accent-500 hover:from-brand-600 hover:to-accent-600 shadow-[0_4px_14px_0_rgba(244,63,94,0.39)] hover:shadow-[0_6px_20px_rgba(244,63,94,0.23)] hover:-translate-y-0.5 text-white px-5 py-2.5 rounded-xl font-medium transition-all shadow-sm"
         >
           <Plus className="w-5 h-5" />
           Add New Student
@@ -64,10 +64,10 @@ const ManageStudent = () => {
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex justify-between items-center">
           <div>
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Total Students</p>
-            <p className="text-3xl font-bold text-blue-600">{students.length}</p>
+            <p className="text-3xl font-bold text-brand-600">{students.length}</p>
           </div>
-          <div className="p-3 bg-blue-50 rounded-xl">
-            <Users className="w-6 h-6 text-blue-600" />
+          <div className="p-3 bg-brand-50 rounded-xl">
+            <Users className="w-6 h-6 text-brand-600" />
           </div>
         </div>
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex justify-between items-center">
@@ -75,15 +75,15 @@ const ManageStudent = () => {
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Active Students</p>
             <p className="text-3xl font-bold text-green-600">{students.length}</p>
           </div>
-          <div className="p-3 bg-indigo-50 rounded-xl">
-            <CheckCircle2 className="w-6 h-6 text-indigo-600" />
+          <div className="p-3 bg-brand-50 rounded-xl">
+            <CheckCircle2 className="w-6 h-6 text-brand-600" />
           </div>
         </div>
       </div>
 
       {/* Search Section */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-        <div className="relative flex items-center bg-slate-50 rounded-xl border border-blue-100/50 focus-within:border-blue-300 focus-within:ring-2 focus-within:ring-blue-100 transition-all">
+        <div className="relative flex items-center bg-slate-50 rounded-xl border border-brand-100/50 focus-within:border-brand-300 focus-within:ring-2 focus-within:ring-brand-100 transition-all">
           <Search className="w-5 h-5 text-gray-400 absolute left-4" />
           <input
             type="text"
@@ -101,7 +101,7 @@ const ManageStudent = () => {
         {/* Loading State */}
         {isLoading && (
           <div className="flex flex-col items-center justify-center py-20 text-gray-400">
-            <Loader2 className="w-10 h-10 animate-spin mb-3 text-indigo-500" />
+            <Loader2 className="w-10 h-10 animate-spin mb-3 text-brand-500" />
             <p className="text-sm font-medium">Loading students...</p>
           </div>
         )}
@@ -143,7 +143,7 @@ const ManageStudent = () => {
                     {/* Student Name */}
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-sm shrink-0 uppercase">
+                        <div className="w-10 h-10 rounded-full bg-brand-100 flex items-center justify-center text-brand-700 font-bold text-sm shrink-0 uppercase">
                           {student.name?.charAt(0) || 'S'}
                         </div>
                         <div>
