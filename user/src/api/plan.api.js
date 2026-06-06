@@ -48,3 +48,14 @@ export const getPlansByLibraryApi = async (libraryId) => {
     });
     return res.data;
 };
+export const updatePlanApi = async ({ id, data }) => {
+    const token = localStorage.getItem("token");
+    const res = await axios.put(`${baseUrl}/library-price/${id}`, data, {
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        withCredentials: true,
+    });
+    return res.data;
+};

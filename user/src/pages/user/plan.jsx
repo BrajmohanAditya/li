@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Package, Plus, Search, Filter, ChevronDown, Trash2, Edit2 } from 'lucide-react';
 import CreatePlanModal from '../../components/plan';
+import DeleteConfirmationModal from '../../components/DeleteConfirmationModal';
 import { getAllLibrariesHook } from '../../hooks/library.hook';
 import { getPlansHook, deletePlanHook } from '../../hooks/plan.hook';
 
@@ -8,6 +9,7 @@ const SubscriptionPlans = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedLibrary, setSelectedLibrary] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [deleteModalData, setDeleteModalData] = useState({ isOpen: false, id: null, name: '' });
 
   const { data: librariesData } = getAllLibrariesHook();
   const libraries = librariesData?.data || [];
@@ -15,7 +17,17 @@ const SubscriptionPlans = () => {
   const { data: plansData, isLoading: isLoadingPlans } = getPlansHook(selectedLibrary);
   console.log("Plans Data API Response:", plansData);
   const plans = Array.isArray(plansData) ? plansData : (Array.isArray(plansData?.data) ? plansData.data : []);
-  const { mutate: deletePlan } = deletePlanHook();
+  const { mutate: deletePlan, isPending: isDeleting } = deletePlanHook();
+
+  const confirmDelete = () => {
+    if (deleteModalData.id) {
+      deletePlan(deleteModalData.id, {
+        onSuccess: () => {
+          setDeleteModalData({ isOpen: false, id: null, name: '' });
+        }
+      });
+    }
+  };
 
   const filteredPlans = plans.filter(plan => {
     const libraryName = libraries.find(lib => lib.id === plan.libraryId)?.name || '';
@@ -178,11 +190,7 @@ const SubscriptionPlans = () => {
                     <td className="px-6 py-4 text-sm text-center">
                       <div className="flex justify-center gap-2">
                         <button 
-                          onClick={() => {
-                            if (window.confirm("Are you sure you want to delete this plan?")) {
-                              deletePlan(plan.id);
-                            }
-                          }}
+                          onClick={() => setDeleteModalData({ isOpen: true, id: plan.id, name: plan.planName })}
                           className="p-1.5 text-red-500 hover:bg-red-50 rounded transition-colors"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -198,6 +206,17 @@ const SubscriptionPlans = () => {
       </div>
 
       <CreatePlanModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+
+      {/* Delete Confirmation Modal */}
+      <DeleteConfirmationModal
+        isOpen={deleteModalData.isOpen}
+        onClose={() => setDeleteModalData({ isOpen: false, id: null, name: '' })}
+        onConfirm={confirmDelete}
+        title="Delete Plan"
+        message="Are you sure you want to delete this subscription plan? This action cannot be undone."
+        itemName={`Plan: ${deleteModalData.name}`}
+        isPending={isDeleting}
+      />
     </div>
   );
 };
