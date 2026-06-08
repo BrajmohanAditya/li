@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { X, Clock, ChevronDown, Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { getAllLibrariesHook } from '../hooks/library.hook';
 import { updatePlanHook } from '../hooks/plan.hook';
 
-const EditPlanModal = ({ isOpen, onClose }) => {
+const EditPlanModal = ({ isOpen, onClose, planData }) => {
   const { data: librariesData, isLoading: isLoadingLibraries } = getAllLibrariesHook();
   const libraries = librariesData?.data || [];
 
@@ -14,6 +14,22 @@ const EditPlanModal = ({ isOpen, onClose }) => {
       duration: 1
     }
   });
+
+  useEffect(() => {
+    if (planData && isOpen) {
+      reset({
+        libraryId: planData.libraryId || "",
+        name: planData.planName || "",
+        planType: planData.type || "MONTH",
+        duration: planData.durationValue || 1,
+        timeSlot: planData.slotType || "",
+        startTime: planData.startTime || "09:00",
+        endTime: planData.endTime || "17:00",
+        price: planData.price || 0
+      });
+    }
+  }, [planData, isOpen, reset]);
+
   const { mutate: updatePlan, isPending } = updatePlanHook();
 
   const onSubmit = (data) => {
@@ -28,7 +44,7 @@ const EditPlanModal = ({ isOpen, onClose }) => {
       price: data.price
     };
 
-    updatePlan(payload, {
+    updatePlan({ id: planData.id, data: payload }, {
       onSuccess: () => {
         reset();
         onClose();

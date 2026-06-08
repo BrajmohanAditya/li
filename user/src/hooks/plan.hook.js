@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
-import { createPlanApi, deletePlanApi, getAllPlansApi, getPlansByLibraryApi } from "../api/plan.api";
+import { createPlanApi, deletePlanApi, getAllPlansApi, getPlansByLibraryApi, updatePlanApi } from "../api/plan.api";
 import { toast } from "sonner";
 
 export const createPlanHook = () => {
@@ -37,6 +37,27 @@ export const deletePlanHook = () => {
       const message =
         error.response?.data?.message ||
         "Failed to delete plan.";
+      toast.error(message);
+    },
+  });
+};
+
+export const updatePlanHook = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: updatePlanApi,
+    onSuccess: (data) => {
+      toast.success(data?.message || "Plan updated successfully!");
+      queryClient.invalidateQueries({ queryKey: ["get-plans"] });
+    },
+    onError: (error) => {
+      let message =
+        error.response?.data?.message ||
+        "Failed to update plan.";
+      if (Array.isArray(message)) {
+        message = message[0];
+      }
       toast.error(message);
     },
   });

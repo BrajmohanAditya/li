@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Package, Plus, Search, Filter, ChevronDown, Trash2, Edit2 } from 'lucide-react';
 import CreatePlanModal from '../../components/plan';
+import EditPlanModal from '../../components/EditPlanModal';
 import DeleteConfirmationModal from '../../components/DeleteConfirmationModal';
 import { getAllLibrariesHook } from '../../hooks/library.hook';
 import { getPlansHook, deletePlanHook } from '../../hooks/plan.hook';
@@ -10,6 +11,7 @@ const SubscriptionPlans = () => {
   const [selectedLibrary, setSelectedLibrary] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [deleteModalData, setDeleteModalData] = useState({ isOpen: false, id: null, name: '' });
+  const [editModalData, setEditModalData] = useState({ isOpen: false, plan: null });
 
   const { data: librariesData } = getAllLibrariesHook();
   const libraries = librariesData?.data || [];
@@ -190,6 +192,12 @@ const SubscriptionPlans = () => {
                     <td className="px-6 py-4 text-sm text-center">
                       <div className="flex justify-center gap-2">
                         <button 
+                          onClick={() => setEditModalData({ isOpen: true, plan: plan })}
+                          className="p-1.5 text-blue-500 hover:bg-blue-50 rounded transition-colors"
+                        >
+                          <Edit2 className="w-4 h-4" />
+                        </button>
+                        <button 
                           onClick={() => setDeleteModalData({ isOpen: true, id: plan.id, name: plan.planName })}
                           className="p-1.5 text-red-500 hover:bg-red-50 rounded transition-colors"
                         >
@@ -206,6 +214,12 @@ const SubscriptionPlans = () => {
       </div>
 
       <CreatePlanModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      
+      <EditPlanModal 
+        isOpen={editModalData.isOpen} 
+        onClose={() => setEditModalData({ isOpen: false, plan: null })} 
+        planData={editModalData.plan} 
+      />
 
       {/* Delete Confirmation Modal */}
       <DeleteConfirmationModal
