@@ -30,6 +30,7 @@ export const getAllLibrariesHook = () => {
     queryKey: ["get-libraries"],
     queryFn: getAllLibrariesApi,
     enabled: !!token,
+    retry: false,
   });
 };
 

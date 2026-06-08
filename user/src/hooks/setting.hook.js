@@ -33,6 +33,7 @@ export const getAllSettingsHook = () => {
   return useQuery({
     queryKey: ["get-settings"],
     queryFn: getAllSettingsApi,
+    retry: false,
   });
 };
 

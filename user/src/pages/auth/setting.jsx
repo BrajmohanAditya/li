@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Settings, Key, MessageSquare, Loader2, Save } from 'lucide-react';
+import { Settings, Key, MessageSquare, Loader2, Save, Library as LibraryIcon, ChevronDown } from 'lucide-react';
 import { 
   getAllSettingsHook, 
   createSettingHook, 
   updateSettingHook 
 } from '../../hooks/setting.hook';
+import { getAllLibrariesHook } from '../../hooks/library.hook';
 
 const SettingsPage = () => {
+  const { data: librariesData, isLoading: isLoadingLibraries } = getAllLibrariesHook();
+  const libraries = librariesData?.data || [];
+
   const { data: settingsResponse, isLoading: isLoadingSettings } = getAllSettingsHook();
   const { mutate: createSetting, isPending: isCreating } = createSettingHook();
   const { mutate: updateSetting, isPending: isUpdating } = updateSettingHook();
@@ -16,6 +20,7 @@ const SettingsPage = () => {
 
   const { register, handleSubmit, reset } = useForm({
     defaultValues: {
+      libraryId: '',
       razorpayKeyId: '',
       razorpayKeySecret: '',
       smsNotificationEnabled: false
@@ -32,6 +37,7 @@ const SettingsPage = () => {
       if (settingsData) {
         setExistingSettingId(settingsData.id);
         reset({
+          libraryId: settingsData.libraryId || '',
           razorpayKeyId: settingsData.razorpayKeyId || '',
           razorpayKeySecret: settingsData.razorpayKeySecret || '',
           smsNotificationEnabled: settingsData.smsNotificationEnabled || false
@@ -79,6 +85,41 @@ const SettingsPage = () => {
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-8">
           
+          {/* General Configuration */}
+          <div className="space-y-6">
+            <div className="flex items-center gap-2 border-b border-gray-100 pb-3">
+              <LibraryIcon className="w-5 h-5 text-purple-600" />
+              <h2 className="text-lg font-bold text-slate-800">General Configuration</h2>
+            </div>
+            
+            <div className="grid grid-cols-1 gap-6">
+              <div>
+                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+                  Select Library <span className="text-red-500">*</span>
+                </label>
+                <div className="relative">
+                  <select 
+                    {...register("libraryId", { required: true })}
+                    className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl text-sm font-medium text-slate-700 outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 appearance-none transition-all cursor-pointer"
+                  >
+                    <option value="" disabled>
+                      {isLoadingLibraries ? 'Loading libraries...' : 'Choose a library'}
+                    </option>
+                    {libraries.map((lib) => (
+                      <option key={lib.id} value={lib.id}>
+                        {lib.name} {lib.city ? `- ${lib.city}` : ''}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-slate-400">
+                    <ChevronDown className="w-4 h-4" />
+                  </div>
+                </div>
+                <p className="text-xs text-slate-400 mt-1.5">Assign these settings to a specific library</p>
+              </div>
+            </div>
+          </div>
+
           {/* Payment Gateway Section */}
           <div className="space-y-6">
             <div className="flex items-center gap-2 border-b border-gray-100 pb-3">
