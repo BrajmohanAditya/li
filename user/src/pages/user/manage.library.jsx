@@ -176,6 +176,11 @@ const ManageLibrary = () => {
                           <div>
                             <p>{lib.city}</p>
                             <p className="text-xs text-gray-400">ZIP: {lib.zip}</p>
+                            {lib.latitude && lib.longitude && (
+                              <p className="text-xs text-gray-400 mt-1" title="Coordinates">
+                                {Number(lib.latitude).toFixed(4)}, {Number(lib.longitude).toFixed(4)}
+                              </p>
+                            )}
                           </div>
                         </div>
                       </td>
