@@ -11,6 +11,7 @@ import SeatManagement from "../pages/user/seat.management.jsx";
 import Plan from "../pages/user/plan.jsx";
 import FeaturesManagement from "../pages/user/features.jsx";
 import Feedback from "../pages/user/feedback.jsx";
+import SettingsPage from "../pages/auth/setting";
 
 const MainRoutes = () => {
   return (
@@ -26,6 +27,7 @@ const MainRoutes = () => {
           <Route path="/plans" element={<Plan />} />
           <Route path="/features" element={<FeaturesManagement />} />
           <Route path="/feedback" element={<Feedback />} />
+          <Route path="/settings" element={<SettingsPage />} />
         </Route>
       </Route>
 
