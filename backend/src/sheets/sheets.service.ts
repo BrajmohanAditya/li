@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 
 import { Sheet } from './entities/sheet.entity';
 import { CreateSheetDto } from './dto/create-sheet.dto';
@@ -67,8 +67,20 @@ export class SheetsService {
     };
   }
 
-  async findAll() {
-    return await this.sheetRepo.find();
+  async findAll(req:any) {
+    const libraries = await this.libraryRepository.find({
+      where: {
+        adminId: req.admins?.id,
+      },
+    });
+    const libraryIds = libraries.map((library) => library.id);
+    const sheets = await this.sheetRepo.find({
+      where: { libraryId: In(libraryIds) },
+    });
+    return {
+      message: 'All sheets fetched successfully',
+      data: sheets,
+    };
   }
 
   async findOne(id: string) {

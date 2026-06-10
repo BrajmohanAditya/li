@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, Put, Req } from '@nestjs/common';
 import { LibraryPriceService } from './library_price.service';
 import { CreateLibraryPriceDto } from './dto/create-library_price.dto';
 import { UpdateLibraryPriceDto } from './dto/update-library_price.dto';
@@ -13,8 +13,8 @@ export class LibraryPriceController {
   }
 
   @Get()
-  findAll() {
-    return this.libraryPriceService.findAll();
+  findAll(@Req() req: any) {
+    return this.libraryPriceService.findAll(req);
   }
 
   @Get(':id')

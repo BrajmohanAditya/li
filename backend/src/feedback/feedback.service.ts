@@ -1,8 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Feedback } from './entities/feedback.entity';
 import { User } from 'src/users/entities/user.entity';
+import { Library } from 'src/librarys/entities/library.entity';
 
 
 @Injectable()
@@ -13,6 +14,9 @@ export class FeedbackService {
 
     @InjectRepository(User)
     private userRepository: Repository<User>,
+
+    @InjectRepository(Library)
+    private libraryRepository: Repository<Library>,
   ) { }
 
   async create(createFeedbackDto: any) {
@@ -20,8 +24,19 @@ export class FeedbackService {
     return this.feedbackRepository.save(feedback);
   }
 
-  async findAll() {
-    const feedbacks = await this.feedbackRepository.find();
+  async findAll(req:any) {
+    const libraries = await this.libraryRepository.find({
+      where: {
+        adminId: req.admins?.id,
+      },
+    });
+    const libraryIds = libraries.map((library) => library.id);
+    const feedbacks = await this.feedbackRepository.find({
+      where: {
+        libraryId: In(libraryIds),
+        
+      },
+    });
 
     const users = await this.userRepository.find();
 
@@ -31,7 +46,8 @@ export class FeedbackService {
       return {
         id: fb.id,
         message: fb.message,
-        userId: fb.userId,
+       createdAt: fb.createdAt,
+        rating: fb.rating,
         user: user
           ? {
             id: user.id,
@@ -39,7 +55,12 @@ export class FeedbackService {
             email: user.email,
           }
           : null,
-        createdAt: fb.createdAt,
+
+          library: {
+            id: fb.libraryId,
+            
+           
+          }
       };
     });
   }

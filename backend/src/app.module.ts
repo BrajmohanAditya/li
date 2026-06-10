@@ -15,6 +15,7 @@ import { LibrarysModule } from './librarys/librarys.module';
 import { SheetsModule } from './sheets/sheets.module';
 import { AuthMiddleware } from './auth/auth.middleware';
 import { FeedbackModule } from './feedback/feedback.module';
+import { SettingsModule } from './settings/settings.module';
 
 @Module({
   imports: [
@@ -54,6 +55,8 @@ import { FeedbackModule } from './feedback/feedback.module';
     SheetsModule,
 
     FeedbackModule,
+
+    SettingsModule,
   ],
 
 

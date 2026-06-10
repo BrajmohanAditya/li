@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, Req } from '@nestjs/common';
 import { LibraryFeatureService } from './library_feature.service';
 import { CreateLibraryFeatureDto } from './dto/create-library_feature.dto';
 import { UpdateLibraryFeatureDto } from './dto/update-library_feature.dto';
@@ -13,8 +13,8 @@ export class LibraryFeatureController {
   }
 
   @Get()
-  findAll() {
-    return this.libraryFeatureService.findAll();
+  findAll(@Req() req: any) {
+    return this.libraryFeatureService.findAll(req);
   }
 
   @Get(':id')

@@ -10,6 +10,11 @@ export class Feedback {
     @Column({ type: 'uuid', nullable: true })
     userId!: string
 
+     @ManyToOne(() => User, {
+        onDelete: 'CASCADE',
+    })
+    @JoinColumn({ name: 'userId' })
+    user!: User;
   
 
     @Column({ type: 'uuid', nullable: true })

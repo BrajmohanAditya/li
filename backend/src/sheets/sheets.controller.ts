@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, Put, Req } from '@nestjs/common';
 import { SheetsService } from './sheets.service';
 import { CreateSheetDto } from './dto/create-sheet.dto';
 import { UpdateSheetDto } from './dto/update-sheet.dto';
@@ -14,8 +14,8 @@ export class SheetsController {
   }
 
   @Get()
-  findAll() {
-    return this.sheetsService.findAll();
+  findAll(@Req() req: any) {
+    return this.sheetsService.findAll(req);
   }
 
   @Get(':id')

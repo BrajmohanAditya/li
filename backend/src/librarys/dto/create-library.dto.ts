@@ -1,4 +1,3 @@
-export class CreateLibraryDto {}
 import {
   IsString,
   IsNotEmpty,

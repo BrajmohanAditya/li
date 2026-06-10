@@ -2,14 +2,18 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateLibraryPriceDto } from './dto/create-library_price.dto';
 import { UpdateLibraryPriceDto } from './dto/update-library_price.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { LibraryPrice } from './entities/library_price.entity';
+import { Library } from 'src/librarys/entities/library.entity';
 
 @Injectable()
 export class LibraryPriceService {
   constructor(
     @InjectRepository(LibraryPrice)
     private readonly libraryPriceRepo: Repository<LibraryPrice>,
+
+    @InjectRepository(Library)
+    private readonly libraryRepo: Repository<Library>,
   ) {}
 
   async create(createLibraryPriceDto: CreateLibraryPriceDto) {
@@ -17,8 +21,21 @@ export class LibraryPriceService {
     return await this.libraryPriceRepo.save(libraryPrice);
   }
 
-  async findAll() {
-    return await this.libraryPriceRepo.find();
+  async findAll(req:any) {
+
+    const libraries = await this.libraryRepo.find({
+      where: {
+        adminId: req.admins?.id,
+      },
+    });
+    const libraryIds = libraries.map((library) => library.id);
+    const prices = await this.libraryPriceRepo.find({
+      where: { libraryId: In(libraryIds) },
+    });
+    return {
+      message: 'All prices fetched successfully',
+      data: prices,
+    };
   }
 
   async findByLibraryId(id: string) {

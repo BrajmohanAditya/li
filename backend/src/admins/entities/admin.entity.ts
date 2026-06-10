@@ -20,5 +20,7 @@ export class Admin {
     @Column({ nullable: true })
     image!: string
 
+    
+
    
 }
