@@ -15,6 +15,7 @@ import { createBookingHook, getAllBookingsHook } from "../../hooks/book.seat.hoo
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
+
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
 const SeatManagement = () => {
