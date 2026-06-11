@@ -61,7 +61,7 @@ export const getAllLibrariesApiInDetails = async () => {
 
 export const updateLibraryApi = async ({ id, data }) => {
     const token = localStorage.getItem("token");
-    const res = await axios.patch(`${baseUrl}/librarys/${id}`, data, {
+    const res = await axios.put(`${baseUrl}/librarys/${id}`, data, {
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`

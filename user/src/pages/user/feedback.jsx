@@ -34,7 +34,7 @@ const Feedback = () => {
 
   // Filter feedbacks locally based on criteria
   const filteredFeedbacks = Array.isArray(allFeedbacks) ? allFeedbacks.filter(f => {
-    const libId = f.library?._id || f.library || f.libraryId;
+    const libId = f.library?.id || f.library?._id || f.libraryId || (typeof f.library === 'string' ? f.library : null);
     const matchesLibrary = selectedLibrary === 'all' || libId === selectedLibrary;
     
     // User name from backend could be nested depending on populate
@@ -241,7 +241,7 @@ const Feedback = () => {
                     </div>
                   </div>
                   
-                  <div className="py-4 text-slate-600 text-sm">
+                  <div className="py-4 text-slate-600 text-sm truncate" title={reviewText}>
                     "{reviewText}"
                   </div>
 

@@ -18,7 +18,7 @@ export const addStudentApi = async (payload) => {
 
 export const getAllStudentsApi = async () => {
     const token = localStorage.getItem("token");
-    const res = await axios.get(`${baseUrl}/users`, {
+    const res = await axios.get(`${baseUrl}/users?limit=1000`, {
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`

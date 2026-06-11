@@ -169,9 +169,7 @@ const FeaturesManagement = () => {
                     <tr className="bg-slate-50/50 border-b border-gray-100">
                       <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">S.No</th>
                       <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Feature</th>
-                      <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Library ID</th>
                       <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Library Name</th>
-                      <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Feature ID</th>
                       <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Created Date</th>
                       <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Actions</th>
                     </tr>
@@ -181,24 +179,23 @@ const FeaturesManagement = () => {
                       <tr key={feature.id || index} className="border-b border-gray-50 hover:bg-slate-50/50 transition-colors">
                         <td className="px-6 py-4 text-sm text-slate-600 font-medium">{index + 1}</td>
                         <td className="px-6 py-4">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-xl bg-brand-500 flex items-center justify-center text-white shadow-sm shadow-brand-200 shrink-0">
-                              <Star className="w-5 h-5 fill-current" />
-                            </div>
-                            <span className="font-bold text-slate-800 capitalize">{feature.featureName || feature.name || feature.feature}</span>
+                          <div className="flex flex-wrap items-center gap-2">
+                            {Array.isArray(feature.features) && feature.features.length > 0 ? feature.features.map((fName, idx) => (
+                              <span key={idx} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-brand-50 border border-brand-100 text-brand-700 text-sm font-semibold capitalize shadow-sm">
+                                <Star className="w-3.5 h-3.5 fill-brand-500 text-brand-500" />
+                                {fName}
+                              </span>
+                            )) : (
+                              <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-brand-500 flex items-center justify-center text-white shadow-sm shadow-brand-200 shrink-0">
+                                  <Star className="w-5 h-5 fill-current" />
+                                </div>
+                                <span className="font-bold text-slate-800 capitalize">{feature.featureName || feature.name || feature.feature || 'Unknown'}</span>
+                              </div>
+                            )}
                           </div>
                         </td>
-                        <td className="px-6 py-4">
-                          <span className="text-xs text-slate-500 font-mono bg-slate-100 px-2.5 py-1 rounded-md">
-                            {feature.libraryId ? `${feature.libraryId.substring(0, 8)}...` : 'N/A'}
-                          </span>
-                        </td>
                         <td className="px-6 py-4 text-sm text-slate-600 capitalize">{libraryName}</td>
-                        <td className="px-6 py-4">
-                          <span className="text-xs text-slate-500 font-mono bg-slate-100 px-2.5 py-1 rounded-md">
-                            {feature.id ? `${feature.id.substring(0, 8)}...` : 'N/A'}
-                          </span>
-                        </td>
                         <td className="px-6 py-4 text-sm text-slate-600">
                           {feature.createdAt ? new Date(feature.createdAt).toLocaleDateString() : 'N/A'}
                         </td>
@@ -211,7 +208,7 @@ const FeaturesManagement = () => {
                               Edit
                             </button>
                             <button 
-                              onClick={() => handleDelete(feature.id, feature.featureName || feature.name || feature.feature)}
+                              onClick={() => handleDelete(feature.id, Array.isArray(feature.features) ? feature.features.join(', ') : (feature.featureName || feature.name || feature.feature || 'Features'))}
                               disabled={isDeleting}
                               className="text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50"
                               title="Delete Feature"

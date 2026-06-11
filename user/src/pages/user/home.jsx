@@ -8,7 +8,8 @@ import {
   IndianRupee,
   Clock,
   CheckCircle2,
-  XCircle
+  XCircle,
+  Star
 } from "lucide-react";
 
 const Home = () => {
@@ -67,13 +68,13 @@ const Home = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Recent Bookings */}
-          <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+          <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden flex flex-col h-[450px]">
             <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center">
               <h2 className="text-lg font-bold text-slate-800">Recent Bookings</h2>
             </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm">
-                <thead className="bg-slate-50 text-slate-600 font-medium">
+            <div className="overflow-auto flex-1 custom-scrollbar">
+              <table className="w-full text-left text-sm relative">
+                <thead className="bg-slate-50 text-slate-600 font-medium sticky top-0 z-10 shadow-sm">
                   <tr>
                     <th className="px-6 py-3">Booking ID</th>
                     <th className="px-6 py-3">Type</th>
@@ -131,17 +132,35 @@ const Home = () => {
           </div>
 
           {/* Recent Feedbacks */}
-          <div className="bg-white rounded-xl shadow-sm border border-slate-100 flex flex-col">
+          <div className="bg-white rounded-xl shadow-sm border border-slate-100 flex flex-col h-[450px]">
             <div className="px-6 py-4 border-b border-slate-100">
               <h2 className="text-lg font-bold text-slate-800">Recent Feedbacks</h2>
             </div>
-            <div className="flex-1 p-6 flex flex-col items-center justify-center text-center">
+            <div className={`flex-1 p-6 flex flex-col items-center text-center overflow-y-auto custom-scrollbar ${recentFeedbacks.length > 0 ? 'justify-start' : 'justify-center'}`}>
               {recentFeedbacks.length > 0 ? (
                 <div className="w-full space-y-4">
                   {/* Map feedbacks here if any */}
                   {recentFeedbacks.map((fb, idx) => (
-                    <div key={idx} className="p-3 bg-slate-50 rounded-lg text-left">
-                      <p className="text-sm text-slate-700">{fb.message || 'Feedback received'}</p>
+                    <div key={idx} className="p-4 bg-slate-50 rounded-lg text-left space-y-2 border border-slate-100 shadow-sm">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <p className="text-sm font-semibold text-slate-800">{fb.user?.name || 'Anonymous'}</p>
+                          <p className="text-xs text-slate-500">{fb.library?.name || 'Unknown Library'}</p>
+                        </div>
+                        <div className="flex items-center space-x-1 bg-amber-50 px-2 py-1 rounded-md">
+                          <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                          <span className="text-xs font-bold text-amber-600">{fb.rating}</span>
+                        </div>
+                      </div>
+                      <p className="text-sm text-slate-700 truncate bg-white p-3 rounded border border-slate-100 mt-2" title={fb.message || 'No message provided'}>
+                        {fb.message || 'No message provided'}
+                      </p>
+                      <div className="flex justify-end mt-1">
+                        <p className="text-xs text-slate-400 flex items-center">
+                          <Clock className="w-3 h-3 mr-1" />
+                          {new Date(fb.createdAt).toLocaleDateString()} {new Date(fb.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </p>
+                      </div>
                     </div>
                   ))}
                 </div>
