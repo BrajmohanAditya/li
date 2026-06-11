@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createBookingApi, getAllBookingsApi, updateBookingApi, deleteBookingApi } from "../api/book.seat.api";
+import { createBookingApi, getAllBookingsApi, getBookingByIdApi, getBookingsByLibraryApi, updateBookingApi, deleteBookingApi } from "../api/book.seat.api";
 import { toast } from "sonner";
 
 export const createBookingHook = () => {
@@ -26,6 +26,26 @@ export const getAllBookingsHook = () => {
     queryKey: ["get-bookings"],
     queryFn: getAllBookingsApi,
     enabled: !!token,
+  });
+};
+
+export const getBookingByIdHook = (id) => {
+  const token = localStorage.getItem("token");
+
+  return useQuery({
+    queryKey: ["get-booking", id],
+    queryFn: () => getBookingByIdApi(id),
+    enabled: !!token && !!id,
+  });
+};
+
+export const getBookingsByLibraryHook = (libraryId) => {
+  const token = localStorage.getItem("token");
+
+  return useQuery({
+    queryKey: ["get-bookings-by-library", libraryId],
+    queryFn: () => getBookingsByLibraryApi(libraryId),
+    enabled: !!token && !!libraryId,
   });
 };
 

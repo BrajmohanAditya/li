@@ -25,9 +25,33 @@ export const getAllBookingsApi = async () => {
     return res.data;
 };
 
+export const getBookingByIdApi = async (id) => {
+    const token = localStorage.getItem("token");
+    const res = await axios.get(`${baseUrl}/bookings/${id}`, {
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        withCredentials: true,
+    });
+    return res.data;
+};
+
+export const getBookingsByLibraryApi = async (libraryId) => {
+    const token = localStorage.getItem("token");
+    const res = await axios.get(`${baseUrl}/bookings/library/${libraryId}`, {
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        withCredentials: true,
+    });
+    return res.data;
+};
+
 export const updateBookingApi = async ({ id, data }) => {
     const token = localStorage.getItem("token");
-    const res = await axios.patch(`${baseUrl}/bookings/${id}`, data, {
+    const res = await axios.put(`${baseUrl}/bookings/${id}`, data, {
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`
