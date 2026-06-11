@@ -27,7 +27,7 @@ export const getAllFeedbacksApi = async () => {
 
 export const getFeedbackByIdApi = async (id) => {
     const token = localStorage.getItem("token");
-    const res = await axios.get(`${baseUrl}/feedback/${id}`, {
+    const res = await axios.get(`${baseUrl}/feedback/library/${id}`, {
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`

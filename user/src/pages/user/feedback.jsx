@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import AddFeedbackModal from '../../components/feedback.jsx';
-import { getAllFeedbacksHook, deleteFeedbackHook } from '../../hooks/feedback.hook.js';
+import { getAllFeedbacksHook, deleteFeedbackHook, getFeedbackByIdHook } from '../../hooks/feedback.hook.js';
 import { getAllLibrariesHook } from '../../hooks/library.hook.js';
 import { 
   MessageSquare, 
@@ -28,15 +28,19 @@ const Feedback = () => {
   const { data: librariesResponse } = getAllLibrariesHook();
   const libraries = librariesResponse?.data || librariesResponse || [];
 
-  // Fetch feedbacks
-  const { data: feedbacksResponse, isLoading: feedbacksLoading } = getAllFeedbacksHook();
-  const allFeedbacks = feedbacksResponse?.data || feedbacksResponse || [];
+  // Fetch all feedbacks
+  const { data: allFeedbacksResponse, isLoading: allFeedbacksLoading } = getAllFeedbacksHook();
+  
+  // Fetch library specific feedbacks
+  const { data: libraryFeedbacksResponse, isLoading: libraryFeedbacksLoading } = getFeedbackByIdHook(selectedLibrary !== 'all' ? selectedLibrary : null);
 
-  // Filter feedbacks locally based on criteria
-  const filteredFeedbacks = Array.isArray(allFeedbacks) ? allFeedbacks.filter(f => {
-    const libId = f.library?.id || f.library?._id || f.libraryId || (typeof f.library === 'string' ? f.library : null);
-    const matchesLibrary = selectedLibrary === 'all' || libId === selectedLibrary;
-    
+  // Determine which feedbacks to use
+  const activeFeedbacksResponse = selectedLibrary === 'all' ? allFeedbacksResponse : libraryFeedbacksResponse;
+  const feedbacksLoading = selectedLibrary === 'all' ? allFeedbacksLoading : libraryFeedbacksLoading;
+  const rawFeedbacks = activeFeedbacksResponse?.data || activeFeedbacksResponse || [];
+
+  // Filter feedbacks locally based on search and rating
+  const filteredFeedbacks = Array.isArray(rawFeedbacks) ? rawFeedbacks.filter(f => {
     // User name from backend could be nested depending on populate
     const userName = f.userId?.name || f.userId?.fullName || f.user?.name || f.user || 'Unknown User';
     const matchesSearch = !searchQuery || userName.toLowerCase().includes(searchQuery.toLowerCase());
@@ -44,7 +48,7 @@ const Feedback = () => {
     const fRating = Number(f.rating || f.rate || f.stars || 0);
     const matchesRating = ratingFilter === 'all' || fRating === parseInt(ratingFilter);
     
-    return matchesLibrary && matchesSearch && matchesRating;
+    return matchesSearch && matchesRating;
   }) : [];
 
   // Calculate stats dynamically
